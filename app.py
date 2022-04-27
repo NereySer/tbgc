@@ -15,10 +15,10 @@ def generate_buzz():
     content = generator.generate_buzz() + '\n'
     content += g_cal.get_incomig_events()
     
-    bot.send_message(os.getenv('TELEGRAM_CHANNEL_ID'), buzz)
+    bot.send_message(os.getenv('TELEGRAM_CHANNEL_ID'), content)
     
     page = '<html><body><h1>'
-    page += buzz
+    page += content.replace('\n', '</br>')
     page += '</h1></body></html>'
     return page
 
