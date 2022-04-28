@@ -23,7 +23,7 @@ def test_end_time():
 
     assert timeEnd.tzinfo==None
 
-    timeEnd = timeEnd.replace(tzinfo=timezone.utc).astimezone(DEFAULT_TIMEZONE)
+    timeEnd = timeEnd.replace(tzinfo=timezone.utc).astimezone(t.DEFAULT_TIMEZONE)
     
     assert timeEnd.hour==23
     assert timeEnd.minute==59
