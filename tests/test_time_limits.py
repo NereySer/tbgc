@@ -4,30 +4,30 @@ from datetime import datetime, timezone, timedelta
 from modules import time_limits as t
 
 def test_start_time():
-    startTime = t.getStart()
+    timeStart = t.getStart()
 
     assert timeStart[-1]=='Z'
     assert abs(datetime.fromisoformat(timeStart[:-1])-datetime.utcnow())<timedelta(seconds = 1)
 
 def test_end_time():
-    endTime = t.getEnd()
+    timeEnd = t.getEnd()
     
-    assert timeStart[-1]=='Z'
+    assert timeEnd[-1]=='Z'
     
-    endTime = datetime.fromisoformat(endTime[:-1])
+    timeEnd = datetime.fromisoformat(timeEnd[:-1])
     
-    assert endTime.hour==23
-    assert endTime.minute==59
-    assert endTime.second==59
+    assert timeEnd.hour==23
+    assert timeEnd.minute==59
+    assert timeEnd.second==59
     
 def test_time_difference():
-    startTime = t.getStart()
-    endTime = t.getEnd()
+    timeStart = t.getStart()
+    timeEnd = t.getEnd()
     
-    startTime = datetime.fromisoformat(startTime[:-1])
-    endTime = datetime.fromisoformat(endTime[:-1])
+    timeStart = datetime.fromisoformat(timeStart[:-1])
+    timeEnd = datetime.fromisoformat(timeEnd[:-1])
     
-    diff = endTime - startTime
+    diff = timeEnd - timeStart
     
-    assert endTime >= startTime
-    assert (endTime - startTime) < timedelta(days = 2)
+    assert timeEnd >= timeStart
+    assert (timeEnd - timeStart) < timedelta(days = 2)
