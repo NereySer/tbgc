@@ -28,7 +28,7 @@ jobs:
       run: python -m pytest -v
     - name: Build the Docker image
       run: |
-        echo '${{secrets.GOOGLE_KEY}}' > civil-hash.json
+        echo '${{secrets.GOOGLE_KEY}}' > key/civil-hash.json
         docker build . --file Dockerfile --tag tbgc:$(date +%s)
     - name: Deploy
       if: github.ref == 'refs/heads/main' || 
