@@ -5,11 +5,6 @@ FROM python:3.7.13-slim
 WORKDIR /src
 
 COPY . ./
-#COPY requirements.txt ./
-#COPY main.py ./
-#COPY buzz ./
-#COPY modules ./
-#COPY civil-hash.json ./key/
 
 RUN pwd && ls -la && pip3 install -r requirements.txt
 
