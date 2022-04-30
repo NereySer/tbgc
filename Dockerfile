@@ -6,6 +6,6 @@ WORKDIR /src
 
 COPY . ./
 
-RUN pwd && ls -la && find . && pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
 CMD python main.py
