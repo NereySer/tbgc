@@ -8,6 +8,7 @@ from buzz import generator
 print( dir() )
 import modules
 print( dir() )
+print( dir( modules ) )
 
 bot = telebot.TeleBot(os.getenv('TELEGRAM_BOT_TOKEN'))
 app = Flask(__name__)
