@@ -5,7 +5,9 @@ from flask import Flask
 
 from buzz import generator
 
+print( dir() )
 import modules
+print( dir() )
 
 bot = telebot.TeleBot(os.getenv('TELEGRAM_BOT_TOKEN'))
 app = Flask(__name__)
