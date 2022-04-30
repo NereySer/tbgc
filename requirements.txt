@@ -2,6 +2,8 @@
 pytest==4.2.0
 attrs==19.1.0
 Flask==2.1.1
+filemagic
+
 pytelegrambotapi
 
 google-api-python-client
