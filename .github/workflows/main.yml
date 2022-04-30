@@ -41,7 +41,7 @@ jobs:
         rm key/civil-hash.json || true
 
   docker_test:
-    name: Build image and make test run
+    name: Build an image and test it
     
     runs-on: ubuntu-latest
 
