@@ -16,7 +16,7 @@ signal.signal(signal.SIGINT, lambda s, f: os._exit(0))
 def generate_buzz():
     content = generator.generate_buzz() + '\n'
     content += g_cal.get_incomig_events(
-        begin = time_limits.getStart()
+        begin = time_limits.getStart(), 
         end = time_limits.getEnd()
     )
     
