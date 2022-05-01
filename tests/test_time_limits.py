@@ -49,7 +49,7 @@ def test_time_bounds(monkeypatch, set_hour, days_diff):
     assert timeEnd.second==59
     
     assert timeEnd > timeBegin
-    assert (timeEnd - timeStart) < timedelta(days = 1)
+    assert (timeEnd - timeBegin) < timedelta(days = 1)
     
 """
 def test_start_time():
