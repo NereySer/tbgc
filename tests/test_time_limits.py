@@ -1,7 +1,6 @@
 import unittest
 import pytest
 
-
 from datetime import datetime, timezone, timedelta
 
 from modules import time_limits
@@ -53,4 +52,4 @@ def test_time_difference(monkeypatch, set_hour, days_diff):
     
     assert timeStart.hour==set_hour
     assert timeEnd > timeStart
-    assert (timeEnd == timeStart) < timedelta(days = 1)
+    assert (timeEnd - timeStart) < timedelta(days = 1)
