@@ -42,6 +42,6 @@ def test_time_difference(monkeypatch):
     timeStart = datetime.fromisoformat(timeStart[:-1]).replace(tzinfo=timezone.utc).astimezone(time_limits.DEFAULT_TIMEZONE)
     timeEnd = datetime.fromisoformat(timeEnd[:-1]).replace(tzinfo=timezone.utc).astimezone(time_limits.DEFAULT_TIMEZONE)
     
-    assert timeEnd.hour=10
+    assert timeEnd.hour==10
     assert timeEnd > timeStart
     assert (timeEnd - timeStart) < timedelta(days = 1)
