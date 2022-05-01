@@ -35,15 +35,17 @@ def test_time_difference(monkeypatch):
         @classmethod
         def now(tzinfo: timezone):
             return ( datetime.now(tzinfo).replace(hour=10) )
+        def utcnow():
+            return ( datetime.utcnow().replace(hour=10) )
     
     monkeypatch.setattr(time_limits, 'datetime', mock_datetime)
     
     timeStart = time_limits.getStart()
     timeEnd = time_limits.getEnd()
     
-    timeStart = datetime.fromisoformat(timeStart[:-1]).replace(tzinfo=timezone.utc).astimezone(time_limits.DEFAULT_TIMEZONE)
-    timeEnd = datetime.fromisoformat(timeEnd[:-1]).replace(tzinfo=timezone.utc).astimezone(time_limits.DEFAULT_TIMEZONE)
+    timeStart = datetime.fromisoformat(timeStart[:-1]) #.replace(tzinfo=timezone.utc).astimezone(time_limits.DEFAULT_TIMEZONE)
+    timeEnd = datetime.fromisoformat(timeEnd[:-1]) #.replace(tzinfo=timezone.utc).astimezone(time_limits.DEFAULT_TIMEZONE)
     
-    assert timeEnd.hour==10
+    assert timeStart.hour==10
     assert timeEnd > timeStart
     assert (timeEnd - timeStart) < timedelta(days = 1)
