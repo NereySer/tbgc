@@ -30,14 +30,20 @@ def test_end_time():
     assert timeEnd.minute==59
     assert timeEnd.second==59
     
-def test_time_difference():
+def test_time_difference(mocker):
+    def mock_datetime_now(self, tzinfo: timezone):
+        return ( self.now(tzinfo).replace(hours=10) )
+
+    mocker.patch(
+        'datetime.datetime.now',
+        mock_datetime_now
+    )
+    
     timeStart = time_limits.getStart()
     timeEnd = time_limits.getEnd()
     
-    timeStart = datetime.fromisoformat(timeStart[:-1])
-    timeEnd = datetime.fromisoformat(timeEnd[:-1])
+    timeStart = datetime.fromisoformat(timeStart[:-1]).replace(tzinfo=timezone.utc).astimezone(time_limits.DEFAULT_TIMEZONE)
+    timeEnd = datetime.fromisoformat(timeEnd[:-1]).replace(tzinfo=timezone.utc).astimezone(time_limits.DEFAULT_TIMEZONE)
     
-    diff = timeEnd - timeStart
-    
-    assert timeEnd >= timeStart
-    assert (timeEnd - timeStart) < timedelta(days = 2)
+    assert timeEnd > timeStart
+    assert (timeEnd - timeStart) < timedelta(days = 1)
