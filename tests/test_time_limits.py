@@ -31,10 +31,12 @@ def test_end_time():
     assert timeEnd.second==59
     
 def test_time_difference(monkeypatch):
-    def mock_datetime_now(tzinfo: timezone):
-        return ( datetime.now(tzinfo).replace(hour=10) )
-
-    monkeypatch.setattr(time_limits.datetime, "now", mock_datetime_now)
+    class mock_datetime:
+        @classmethod
+        def now(tzinfo: timezone):
+            return ( datetime.now(tzinfo).replace(hour=10) )
+    
+    monkeypatch.setattr(time_limits, 'datetime', mock_datetime)
     
     timeStart = time_limits.getStart()
     timeEnd = time_limits.getEnd()
