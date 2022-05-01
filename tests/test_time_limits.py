@@ -14,8 +14,10 @@ def getTime(time):
     
     return time_f.replace(tzinfo=timezone.utc).astimezone(time_limits.DEFAULT_TIMEZONE)
 
-@pytest.mark.parametrize("set_hour, days_diff", [(9, 0), (10, 0), (12, 0), (13, 1), (23, 1)])
-def test_time_bounds(monkeypatch, set_hour, days_diff):
+@pytest.mark.parametrize("set_hour", [9, 10, 12, 13, 23])
+def test_time_bounds(monkeypatch, set_hour):
+    days_diff = 1 if set_hour > LATE_HOUR else 0
+    
     class mock_datetime:
         @classmethod
         def now(self, tz=None):
