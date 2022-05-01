@@ -35,6 +35,7 @@ def test_time_difference(monkeypatch):
         @classmethod
         def now(self, tzinfo=None):
             return ( datetime.now(tzinfo).replace(hour=10) )
+        @classmethod
         def utcnow():
             return ( datetime.utcnow().replace(hour=10) )
     
