@@ -16,7 +16,7 @@ def getTime(time):
 
 @pytest.mark.parametrize("set_hour", [9, 10, 12, 13, 23])
 def test_time_bounds(monkeypatch, set_hour):
-    days_diff = 1 if set_hour > LATE_HOUR else 0
+    days_diff = 1 if set_hour > time_limits.LATE_HOUR else 0
     
     class mock_datetime:
         @classmethod
