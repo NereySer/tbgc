@@ -29,12 +29,13 @@ def test_end_time():
     assert timeEnd.hour==23
     assert timeEnd.minute==59
     assert timeEnd.second==59
-    
-def test_time_difference(monkeypatch):
+
+@pytest.mark.parametrize("set_hour, days_diff", [(9, 0), (10, 0), (12, 0), (13, 1), (23, 1)])
+def test_time_difference(monkeypatch, set_hour, days_diff):
     class mock_datetime:
         @classmethod
         def now(self, tz=None):
-            return ( datetime.now(time_limits.DEFAULT_TIMEZONE).replace(hour=10).astimezone(tz) )
+            return ( datetime.now(time_limits.DEFAULT_TIMEZONE).replace(hour=set_hour).astimezone(tz) )
         @classmethod
         def utcnow(self):
             return ( self.now(timezone.utc) )
@@ -44,9 +45,10 @@ def test_time_difference(monkeypatch):
     timeStart = time_limits.getStart()
     timeEnd = time_limits.getEnd()
     
-    timeStart = datetime.fromisoformat(timeStart[:-1]) #.replace(tzinfo=timezone.utc).astimezone(time_limits.DEFAULT_TIMEZONE)
-    timeEnd = datetime.fromisoformat(timeEnd[:-1]) #.replace(tzinfo=timezone.utc).astimezone(time_limits.DEFAULT_TIMEZONE)
+    timeStart = datetime.fromisoformat(timeStart[:-1]).replace(tzinfo=timezone.utc).astimezone(time_limits.DEFAULT_TIMEZONE)
+    timeEnd = datetime.fromisoformat(timeEnd[:-1]).replace(tzinfo=timezone.utc).astimezone(time_limits.DEFAULT_TIMEZONE)
+    timeEnd -= timedelta(days = days_diff)
     
-    assert timeStart.hour==10
+    assert timeStart.hour==set_hour
     assert timeEnd > timeStart
-    assert (timeEnd - timeStart) < timedelta(days = 1)
+    assert (timeEnd == timeStart) < timedelta(days = 1)
