@@ -1,5 +1,3 @@
-import unittest
-
 from datetime import datetime, timedelta
 
 from modules import g_cal
