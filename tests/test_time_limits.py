@@ -33,7 +33,7 @@ def test_end_time():
 def test_time_difference(monkeypatch):
     class mock_datetime:
         @classmethod
-        def now(tzinfo=None):
+        def now(self, tzinfo=None):
             return ( datetime.now(tzinfo).replace(hour=10) )
         def utcnow():
             return ( datetime.utcnow().replace(hour=10) )
