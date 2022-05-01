@@ -32,11 +32,11 @@ def test_end_time():
     
 def test_time_difference(monkeypatch):
     class mock_datetime:
-        @staticmethod
-        def now(tz=None):
+        @classmethod
+        def now(self, tz=None):
             return ( datetime.now(time_limits.DEFAULT_TIMEZONE).replace(hour=10).astimezone(tz) )
-        @staticmethod
-        def utcnow():
+        @classmethod
+        def utcnow(self):
             return ( self.now(timezone.utc) )
     
     monkeypatch.setattr(time_limits, 'datetime', mock_datetime)
