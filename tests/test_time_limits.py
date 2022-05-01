@@ -34,7 +34,7 @@ def test_time_difference(monkeypatch):
     def mock_datetime_now(tzinfo: timezone):
         return ( datetime.now(tzinfo).replace(hour=10) )
 
-    monkeypatch.setattr(modules.time_limits.datetime, "now", mock_datetime_now)
+    monkeypatch.setattr(time_limits.datetime, "now", mock_datetime_now)
     
     timeStart = time_limits.getStart()
     timeEnd = time_limits.getEnd()
