@@ -1,0 +1,9 @@
+
+def format(events):
+    if not events:
+        retval += 'No upcoming events found.\n'
+    for event in events:
+        start = event['start'].get('dateTime', event['start'].get('date'))
+        retval += start + event['summary'] + '\n'
+        
+    return retval
