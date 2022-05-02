@@ -23,7 +23,7 @@ def isTimeToRemind(events) -> bool:
     
     if first_event_datetime.date() > now.date() + timedelta(days = 1): 
         #Day after tomorrow no sense to remind
-        return false
+        return False
     
     if first_event_datetime.date() == now.date(): 
         #Today
@@ -32,7 +32,7 @@ def isTimeToRemind(events) -> bool:
             return first_event_datetime.hour < EVENING_HOUR
         else:
             #Daytime reminder
-            return true
+            return True
     else:
         #Evening reminder for early tomorrow events
         return now.hour > LATE_HOUR and first_event_datetime.hour < LATE_HOUR
