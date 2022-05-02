@@ -18,6 +18,10 @@ def generate_event(hour, days_add):
     }
 
 @pytest.mark.parametrize("set_hour, events, expected", [
+    #No events
+    (9, [], False),
+    (12, [], False),
+    (21, [], False),
     #Morning reminders
     (9, [generate_event(10, 0)], True),
     (9, [generate_event(11, 0)], True),
@@ -56,7 +60,11 @@ def test_isTimeToRemind_single_event(monkeypatch, set_hour, events, expected: bo
     assert time_checks.isTimeToRemind(events) == expected
     
 @pytest.mark.parametrize("set_hour, events, exp_raise", [
-    (9, [generate_event(10, 0), generate_event(9, 0)], True)
+    (10, [generate_event(10, 0)], False),
+    (11, [generate_event(10, 0)], True),
+    (9, [generate_event(10, 0), generate_event(11, 0)], False),
+    (9, [generate_event(10, 0), generate_event(9, 0)], True),
+    (9, [generate_event(10, 0), generate_event(11, 1)], True)
 ])
 def test_isTimeToRemind_error_raising(monkeypatch, set_hour, events, exp_raise: bool):
     class mock_datetime:
