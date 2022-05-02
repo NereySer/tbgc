@@ -10,7 +10,7 @@ def isTimeToRemind(events) -> bool:
     now = datetime.now(DEFAULT_TIMEZONE)
     first_event_datetime = datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date')))
     
-    if now > time_first_event: raise Exception("Events in past is not allowed")
+    if now > first_event_datetime: raise Exception("Events in past is not allowed")
         
     for event in events:
         event_datetime = datetime.fromisoformat(event['start'].get('dateTime', event['start'].get('date')))
