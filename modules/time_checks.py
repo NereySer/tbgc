@@ -35,7 +35,7 @@ def isTimeToRemind(events) -> bool:
             return true
     else:
         #Evening reminder for early tomorrow events
-        return now.hour > LATE_HOUR && first_event_datetime.hour < LATE_HOUR
+        return now.hour > LATE_HOUR and first_event_datetime.hour < LATE_HOUR
     
     raise Exception("Something wrong occured")
 
