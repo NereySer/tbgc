@@ -44,7 +44,7 @@ def test_isTimeToRemind_single_event(monkeypatch, set_hour, events, expected: bo
             return ( self.now(timezone.utc) )
         
         @classmethod
-        def fromisoformat(val):
+        def fromisoformat(self, val):
             return datetime.fromisoformat(val)
     
     monkeypatch.setattr(time_checks, 'datetime', mock_datetime)
