@@ -25,12 +25,4 @@ def get_incomig_events(begin: datetime, end: datetime):
                                             timeMin=format_datetime(begin), timeMax=format_datetime(end),
                                             singleEvents=True,
                                             orderBy='startTime').execute()
-    events = events_result.get('items', [])
-
-    if not events:
-        retval += 'No upcoming events found.\n'
-    for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        retval += start + event['summary'] + '\n'
-    
-    return retval
+    return events_result.get('items', [])
