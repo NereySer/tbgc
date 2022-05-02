@@ -10,7 +10,7 @@ def getTime(time):
     
     return time
 
-def generate_event(hour, day_add):
+def generate_event(hour, days_add):
     return {
         'start': {
             'dateTime': (datetime.now(DEFAULT_TIMEZONE).replace(hour=hour) + timedelta(days = days_add)).isoformat()
