@@ -2,7 +2,7 @@ import pytest
 
 from datetime import datetime, timezone, timedelta
 
-from modules import time_limits
+from modules import time_checks
 
 def getTime(time):
     assert time.tzinfo==time_limits.DEFAULT_TIMEZONE
