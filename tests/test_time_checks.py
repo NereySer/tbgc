@@ -74,7 +74,7 @@ def test_isTimeToRemind_error_raising(monkeypatch, set_hour, events, exp_raise: 
     
     monkeypatch.setattr(time_checks, 'datetime', mock_datetime)
     
-    if exp_raises:
+    if exp_raise:
         with pytest.raises(Exception):
             time_checks.isTimeToRemind(events)
     else:
