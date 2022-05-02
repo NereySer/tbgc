@@ -5,4 +5,4 @@ def test_work():
     
     response = tester.get('/')
     
-    assert response.status >= 200 and response.status <= 299
+    assert response.status_code >= 200 and response.status_code <= 299
