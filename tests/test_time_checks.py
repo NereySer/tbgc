@@ -31,7 +31,11 @@ def generate_event(hour, days_add):
     (12, [generate_event(9, 1)], False),
     (13, [generate_event(9, 1)], True),
     (13, [generate_event(11, 1)], True),
-    (13, [generate_event(12, 1)], False)
+    (13, [generate_event(12, 1)], False),
+    #Events in deep future
+    (9, [generate_event(9, 2)], False),
+    (12, [generate_event(9, 2)], False),
+    (21, [generate_event(9, 2)], False)
 ])
 def test_isTimeToRemind_single_event(monkeypatch, set_hour, events, expected: bool):
     class mock_datetime:
