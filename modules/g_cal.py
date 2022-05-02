@@ -22,7 +22,7 @@ def get_incomig_events(begin: datetime, end: datetime):
     
     retval += 'Getting the upcoming 10 events\n'
     events_result = g_service.events().list(calendarId=calendarId,
-                                            timeMin=format_datetime(begin), timeMax=(end),
+                                            timeMin=format_datetime(begin), timeMax=format_datetime(end),
                                             singleEvents=True,
                                             orderBy='startTime').execute()
     events = events_result.get('items', [])
