@@ -5,7 +5,7 @@ LATE_HOUR = 12
 EVENING_HOUR = 17
 
 def isTimeToRemind(events) -> bool: 
-    if not events or events == []: return false
+    if not events: return False
     
     now = datetime.now(DEFAULT_TIMEZONE)
     first_event_datetime = datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date')))
