@@ -35,8 +35,7 @@ def test_time_bounds(monkeypatch, set_hour):
     if days_diff == 0:
         assert abs(timeBegin - now) < timedelta(seconds = 1)
     else:
-        assert timeBegin > now + timedelta(days = days_diff-1)
-        assert timeBegin < now + timedelta(days = days_diff)
+        assert timeBegin.date() == now.date() + timedelta(days = days_diff)
 
         assert timeBegin.hour==0
         assert timeBegin.minute==0
@@ -47,5 +46,5 @@ def test_time_bounds(monkeypatch, set_hour):
     assert timeEnd.second==59
     
     assert timeEnd > timeBegin
-    assert (timeEnd - timeBegin) < timedelta(days = 1)
+    assert timeEnd.date() == timeBegin.date()
     
