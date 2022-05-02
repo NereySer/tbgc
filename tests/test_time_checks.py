@@ -17,6 +17,35 @@ def generate_event(hour, days_add):
         }
     }
 
+@pytest.mark.parametrize("set_hour, events, exp_raise", [
+    (9, [generate_event(10, 0)], False),
+    (11, [generate_event(10, 0)], True),
+    (9, [generate_event(10, 0), generate_event(11, 0)], False),
+    (9, [generate_event(11, 0), generate_event(10, 0)], True),
+    (9, [generate_event(10, 0), generate_event(11, 1)], True)
+])
+def test_isTimeToRemind_error_raising(monkeypatch, set_hour, events, exp_raise: bool):
+    class mock_datetime:
+        @classmethod
+        def now(self, tz=None):
+            return ( datetime.now(DEFAULT_TIMEZONE).replace(hour=set_hour).astimezone(tz) )
+        
+        @classmethod
+        def utcnow(self):
+            return ( self.now(timezone.utc) )
+        
+        @classmethod
+        def fromisoformat(self, val):
+            return datetime.fromisoformat(val)
+    
+    monkeypatch.setattr(time_checks, 'datetime', mock_datetime)
+    
+    if exp_raise:
+        with pytest.raises(Exception):
+            time_checks.isTimeToRemind(events)
+    else:
+        time_checks.isTimeToRemind(events)
+
 @pytest.mark.parametrize("set_hour, events, expected", [
     #No events
     (9, [], False),
@@ -59,35 +88,6 @@ def test_isTimeToRemind_single_event(monkeypatch, set_hour, events, expected: bo
     
     assert time_checks.isTimeToRemind(events) == expected
     
-@pytest.mark.parametrize("set_hour, events, exp_raise", [
-    (10, [generate_event(10, 0)], False),
-    (11, [generate_event(10, 0)], True),
-    (9, [generate_event(10, 0), generate_event(11, 0)], False),
-    (9, [generate_event(10, 0), generate_event(9, 0)], True),
-    (9, [generate_event(10, 0), generate_event(11, 1)], True)
-])
-def test_isTimeToRemind_error_raising(monkeypatch, set_hour, events, exp_raise: bool):
-    class mock_datetime:
-        @classmethod
-        def now(self, tz=None):
-            return ( datetime.now(DEFAULT_TIMEZONE).replace(hour=set_hour).astimezone(tz) )
-        
-        @classmethod
-        def utcnow(self):
-            return ( self.now(timezone.utc) )
-        
-        @classmethod
-        def fromisoformat(self, val):
-            return datetime.fromisoformat(val)
-    
-    monkeypatch.setattr(time_checks, 'datetime', mock_datetime)
-    
-    if exp_raise:
-        with pytest.raises(Exception):
-            time_checks.isTimeToRemind(events)
-    else:
-        time_checks.isTimeToRemind(events)
-
 @pytest.mark.parametrize("set_hour", [9, 10, 12, 13, 23])
 def test_time_bounds(monkeypatch, set_hour):
     days_diff = 1 if set_hour > LATE_HOUR else 0
