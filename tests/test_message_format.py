@@ -1,3 +1,5 @@
+import pytest
+
 from modules import message_format
 
 @pytest.mark.parametrize("events, expected", [
