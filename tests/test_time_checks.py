@@ -44,7 +44,7 @@ def test_isTimeToRemind_single_event(monkeypatch, set_hour, events, expected: bo
     
     monkeypatch.setattr(time_checks, 'datetime', mock_datetime)
     
-    assert modules.isTimeToRemind(events) == expected
+    assert time_checks.isTimeToRemind(events) == expected
     
 
 @pytest.mark.parametrize("set_hour", [9, 10, 12, 13, 23])
