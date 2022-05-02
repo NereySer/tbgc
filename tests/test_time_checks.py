@@ -38,9 +38,14 @@ def test_isTimeToRemind_single_event(monkeypatch, set_hour, events, expected: bo
         @classmethod
         def now(self, tz=None):
             return ( datetime.now(DEFAULT_TIMEZONE).replace(hour=set_hour).astimezone(tz) )
+        
         @classmethod
         def utcnow(self):
             return ( self.now(timezone.utc) )
+        
+        @classmethod
+        def fromisoformat(val):
+            return datetime.fromisoformat(val)
     
     monkeypatch.setattr(time_checks, 'datetime', mock_datetime)
     
