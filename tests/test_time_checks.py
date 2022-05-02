@@ -3,30 +3,31 @@ import pytest
 from datetime import datetime, timezone, timedelta
 
 from modules import time_checks
+from modules.time_checks import DEFAULT_TIMEZONE, LATE_HOUR
 
 def getTime(time):
-    assert time.tzinfo==time_limits.DEFAULT_TIMEZONE
+    assert time.tzinfo==DEFAULT_TIMEZONE
     
     return time
 
 @pytest.mark.parametrize("set_hour", [9, 10, 12, 13, 23])
 def test_time_bounds(monkeypatch, set_hour):
-    days_diff = 1 if set_hour > time_limits.LATE_HOUR else 0
+    days_diff = 1 if set_hour > LATE_HOUR else 0
     
     class mock_datetime:
         @classmethod
         def now(self, tz=None):
-            return ( datetime.now(time_limits.DEFAULT_TIMEZONE).replace(hour=set_hour).astimezone(tz) )
+            return ( datetime.now(DEFAULT_TIMEZONE).replace(hour=set_hour).astimezone(tz) )
         @classmethod
         def utcnow(self):
             return ( self.now(timezone.utc) )
     
-    monkeypatch.setattr(time_limits, 'datetime', mock_datetime)
+    monkeypatch.setattr(time_checks, 'datetime', mock_datetime)
     
-    now = time_limits.datetime.now(time_limits.DEFAULT_TIMEZONE)
+    now = time_checks.datetime.now(DEFAULT_TIMEZONE)
     assert now.hour==set_hour
 
-    time_bounds = time_limits.getTimeBounds()
+    time_bounds = time_checks.getTimeBounds()
     
     timeBegin = getTime(time_bounds['begin'])
     timeEnd = getTime(time_bounds['end'])
