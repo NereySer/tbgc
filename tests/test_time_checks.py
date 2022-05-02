@@ -58,7 +58,7 @@ def test_isTimeToRemind_single_event(monkeypatch, set_hour, events, expected: bo
 @pytest.mark.parametrize("set_hour, events, exp_raise", [
     (9, [generate_event(10, 0), generate_event(9, 0)], True)
 ])
-def test_isTimeToRemind_error_raising(monkeypatch, set_hour, events, exp_raise: bool)
+def test_isTimeToRemind_error_raising(monkeypatch, set_hour, events, exp_raise: bool):
     class mock_datetime:
         @classmethod
         def now(self, tz=None):
