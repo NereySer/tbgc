@@ -24,12 +24,12 @@ def check_events():
     content.append(events)
     
     isTime = time_checks.isTimeToRemind(events)
-    content.append('Is time: ' + isTime)
+    content.append('Is time: ' + str(isTime) )
     
     bot.send_message(os.getenv('TELEGRAM_CHANNEL_ID'), message_format.format(events))
     
     page = '<html><body><h1>'
-    page += content #.replace('\n', '</br>')
+    page += str(content) #.replace('\n', '</br>')
     page += '</h1></body></html>'
     return page
 
