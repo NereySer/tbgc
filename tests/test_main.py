@@ -3,4 +3,6 @@ import main
 def test_work():
     tester = main.app.test_client()
     
-    assert tester.get('/') is None
+    response = tester.get('/')
+    
+    assert response.data is None
