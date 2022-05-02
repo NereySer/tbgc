@@ -21,7 +21,7 @@ def generate_event(hour, days_add):
     #No events
     (9, [], False),
     (12, [], False),
-    (21, [], False),
+    (21, None, False),
     #Morning reminders
     (9, [generate_event(10, 0)], True),
     (9, [generate_event(11, 0)], True),
