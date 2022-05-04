@@ -17,6 +17,7 @@ def telegram(events) -> str:
     
     return template.render(events=events)
 
-def web(context, html:bool=True):
+def web(content, html:bool=True):
     template = initTemplate('raise.html' if html else 'raise')
     
+    return template.render(content=content)
