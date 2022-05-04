@@ -1,0 +1,15 @@
+<html>
+  <body>
+    <p>Time bounds: {{ context['time_bounds']['begin'] }} - {{ context['time_bounds']['end'] }}</p>
+
+    {% if context['events'] %}
+      {% for event in context['events'] %}
+        <p>{{ event['start'].get('dateTime', event['start'].get('date')) }} {{ event['summary'] }}</p>
+      {% endfor %}
+    {% else %}
+      <p>No upcoming events found.</p>
+    {% endif %}
+    
+    <p>Time to remind: {{ context['isTime'] }}</p>
+  </body>
+</html>
