@@ -1,4 +1,13 @@
-from flask import render_template
+from jinja2 import Template
+
+template = None
+
+def initTemplate():
+    if template == None:
+        html = open('foopkg/templates/0.hello.html').read()
+        template = Template(html)
 
 def format(events) -> str:
-    return render_template('templates/telegram_message', events=events)
+    initTemplate()
+    
+    return template.render(events=events)
