@@ -3,7 +3,7 @@ from jinja2 import Template
 template = None
 
 def initTemplate():
-    if template == None:
+    if template is None:
         html = open('foopkg/templates/0.hello.html').read()
         template = Template(html)
 
