@@ -28,7 +28,7 @@ def check_events():
     
     bot.send_message(os.getenv('TELEGRAM_CHANNEL_ID'), message_format.telegram(events))
     
-    return message_format.web(context)
+    return message_format.web(content)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=os.getenv('PORT')) # port 5000 is the default
