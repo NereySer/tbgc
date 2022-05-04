@@ -5,7 +5,7 @@ templates = {}
 def initTemplate(name: str):
     global templates
     
-    if templates[name] is None:
+    if name not in templates:
         j2 = open(f'templates/{name}.j2').read()
         
         templates[name] = Template(j2, trim_blocks=True, lstrip_blocks=True)
