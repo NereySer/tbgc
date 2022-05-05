@@ -10,7 +10,7 @@ def getCursor():
     if db_conn is None:
         db_cur = None
         
-        DATABASE_URL = os.getenv['DATABASE_URL']
+        DATABASE_URL = os.getenv('DATABASE_URL')
     
         db_conn = psycopg2.connect(DATABASE_URL) #, sslmode='require')
         db_conn.set_session(autocommit=True)
