@@ -41,6 +41,9 @@ def testDB():
 #cur.execute("CREATE TABLE config (key varchar PRIMARY KEY, value varchar);")
 #conn.commit()
 
-def closeDB()
-    db_cur.close()
-    db_conn.close()
+def closeDB():
+    if db_cur is not None: 
+        db_cur.close()
+        
+    if db_conn is not None:
+        db_conn.close()
