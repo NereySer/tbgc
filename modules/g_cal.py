@@ -16,6 +16,8 @@ SERVICE_ACCOUNT_FILE = 'key/civil-hash.json'
 def getGService():
     global g_service
     
+    print(open('key/civil-hash.json').read())
+    
     if g_service is None:
         credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
         g_service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
