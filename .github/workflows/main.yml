@@ -29,15 +29,9 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-    #- name: Set up Python 3.7
-    #  uses: actions/setup-python@v3
-    #  with:
-    #    python-version: "3.7.12"
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        #pip install pytest
-        #if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         pip3 install -r requirements.txt
     - name: Create Google API key
       run: |
@@ -71,7 +65,9 @@ jobs:
     - name: Create Google API key
       run: |
         mkdir key
-        echo '${{secrets.GOOGLE_KEY}}' > key/civil-hash.json
+        cat > key/civil-hash.json <<- END_OF_KEY
+        ${{secrets.GOOGLE_KEY}}
+        END_OF_KEY
     - name: Build the Docker image
       run: |
         docker build . \
@@ -130,7 +126,9 @@ jobs:
     - name: Create Google API key
       run: |
         mkdir key
-        echo '${{secrets.GOOGLE_KEY}}' > key/civil-hash.json
+        cat > key/civil-hash.json <<- END_OF_KEY
+        ${{secrets.GOOGLE_KEY}}
+        END_OF_KEY
     - name: Deploy
       uses: akhileshns/heroku-deploy@v3.12.12
       with:
