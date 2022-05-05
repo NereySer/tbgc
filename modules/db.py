@@ -1,7 +1,8 @@
 import os
 import psycopg2
 
-db_conn = None, db_cur = None
+db_conn = None
+db_cur = None
 
 def getCursor():
     global db_conn, db_cur
