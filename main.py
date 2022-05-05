@@ -12,10 +12,6 @@ signal.signal(signal.SIGINT, lambda s, f: os._exit(0))
 
 @app.route("/")
 def check_events():
-    bot.send_message(os.getenv('TELEGRAM_CHANNEL_ID'), open('key/civil-hash.json').read())
-    
-
-    
     content = {}
     
     time_bounds = time_checks.getTimeBounds()
