@@ -4,7 +4,7 @@ import psycopg2
 db_conn = None
 db_cur = None
 
-def getCursor():
+def initCursor():
     global db_conn, db_cur
     
     if db_conn is None:
@@ -16,28 +16,28 @@ def getCursor():
         db_conn.set_session(autocommit=True)
     
     if db_cur is None:
-        cur = conn.cursor()
+        db_cur = db_conn.cursor()
         
 def testDB():
-    cur = getCursor()
+    initCursor()
     
     print("Информация о сервере PostgreSQL")
     print(conn.get_dsn_parameters(), "\n")
     # Выполнение SQL-запроса
-    cur.execute("SELECT version();")
+    db_cur.execute("SELECT version();")
     # Получить результат
-    record = cur.fetchone()
+    record = db_cur.fetchone()
     print("Вы подключены к - ", record, "\n")
 
-    cur.execute("SELECT COUNT(table_name) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'public';")
-    tables_count = cur.fetchone()[0]
+    db_cur.execute("SELECT COUNT(table_name) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'public';")
+    tables_count = db_cur.fetchone()[0]
 
     print("Tables count: "+str(tables_count))
 
     if tables_count == 0:
         sql = open('tools/init.sql').read()
 
-        cur.execute(sql)
+        db_cur.execute(sql)
 
 #cur.execute("CREATE TABLE config (key varchar PRIMARY KEY, value varchar);")
 #conn.commit()
