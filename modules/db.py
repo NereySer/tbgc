@@ -22,7 +22,7 @@ def testDB():
     initCursor()
     
     print("Информация о сервере PostgreSQL")
-    print(conn.get_dsn_parameters(), "\n")
+    print(db_conn.get_dsn_parameters(), "\n")
     # Выполнение SQL-запроса
     db_cur.execute("SELECT version();")
     # Получить результат
