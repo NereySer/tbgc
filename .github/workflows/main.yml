@@ -13,6 +13,19 @@ jobs:
     
     runs-on: ubuntu-latest
     
+    container: node:10.18-jessie
+    
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5    
+    
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.7
@@ -35,6 +48,7 @@ jobs:
         TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
         TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_TEST_ID}}
         GOOGLE_CALENDAR_ID: ${{secrets.GOOGLE_CALENDAR_ID}}      
+        DATABASE_URL: postgres://postgres:postgres@postgres/postgres
     - name: Clear all
       if: always()
       run: |
