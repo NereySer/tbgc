@@ -18,29 +18,32 @@ def initCursor():
     if db_cur is None:
         db_cur = db_conn.cursor()
         
-def testDB():
-    initCursor()
-    
-    print("Информация о сервере PostgreSQL")
-    print(db_conn.get_dsn_parameters(), "\n")
-    # Выполнение SQL-запроса
-    db_cur.execute("SELECT version();")
-    # Получить результат
-    record = db_cur.fetchone()
-    print("Вы подключены к - ", record, "\n")
-
     db_cur.execute("SELECT COUNT(table_name) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'public';")
     tables_count = db_cur.fetchone()[0]
 
-    print("Tables count: "+str(tables_count))
+    #print("Tables count: "+str(tables_count))
 
     if tables_count == 0:
         sql = open('tools/init.sql').read()
 
         db_cur.execute(sql)
 
-#cur.execute("CREATE TABLE config (key varchar PRIMARY KEY, value varchar);")
-#conn.commit()
+def getConfig():
+    initCursor()
+
+    retval = {}
+
+    db_cur.execute("SELECT * FROM config;")
+
+    for row in db_cur:
+        retval[row[0]] = row[1]
+
+    return retval
+
+def setConfig(key, value):
+    initCursor()
+
+    db_cur.execute("UPDATE config SET value=%(value)s WHERE key=%(key)s;", {'key': key, 'value': value})
 
 def closeDB():
     if db_cur is not None: 
