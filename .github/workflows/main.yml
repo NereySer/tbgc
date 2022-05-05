@@ -45,7 +45,6 @@ jobs:
         cat > key/civil-hash.json <<- END_OF_KEY
         ${{secrets.GOOGLE_KEY}}
         END_OF_KEY
-        #echo '${{secrets.GOOGLE_KEY}}' > key/civil-hash.json
     - name: Run tests
       run: python -m pytest -v
       env: 
