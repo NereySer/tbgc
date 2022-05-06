@@ -17,7 +17,8 @@ def checkEvents(events):
         if event_datetime < first_event_datetime:
             raise Exception("Events should be sorted")
             
-        if event_datetime > last_event_datetime
+        if event_datetime > last_event_datetime:
+            last_event_datetime = event_datetime
     
     return (first_event_datetime, last_event_datetime)
 
