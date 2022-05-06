@@ -92,7 +92,7 @@ def test_isTimeToRemind_single_event(monkeypatch, set_hour, events, expected: bo
     
     assert isTime == expected
     if isTime:
-        assert last_event == datetime.fromisoformat(events[len(events)-1]['start']['dateTime']))
+        assert last_event == datetime.fromisoformat(events[len(events)-1]['start']['dateTime'])
     
 @pytest.mark.parametrize("set_hour", [9, 10, 12, 13, 23])
 def test_time_bounds(monkeypatch, set_hour):
