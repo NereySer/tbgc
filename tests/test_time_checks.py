@@ -70,7 +70,7 @@ def test_isTimeToRemind_error_raising(monkeypatch, set_hour, events, exp_raise: 
     (12, [generate_event(9, 2)], False),
     (21, [generate_event(9, 2)], False),
     #Check multiple
-    (9, [generate_event(10, 0), generate_event(11, 0), generate_event(15, 0)], True),
+    (9, [generate_event(10, 0), generate_event(11, 0), generate_event(15, 0)], True)
 ])
 def test_isTimeToRemind_single_event(monkeypatch, set_hour, events, expected: bool):
     class mock_datetime:
