@@ -1,4 +1,4 @@
-from modules import DbConfig
+from modules.db import DbConfig
 
 def test_work():
     db = DbConfig()
