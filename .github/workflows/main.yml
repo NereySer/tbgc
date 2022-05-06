@@ -100,7 +100,6 @@ jobs:
               bash -c '\
                 apt-get update && \
                 apt-get install -y curl'
-        docker ps
       env: 
         TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
         TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_TEST_ID}}
