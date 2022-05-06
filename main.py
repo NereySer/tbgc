@@ -32,6 +32,7 @@ def check_events():
     content['isTime'] = isTime
     content['last_event'] = last_event
     
+    print(conf.last_time)
     should_remind = isTime and datetime.fromisoformat(conf.last_time) < last_event
     content['should_remind'] = should_remind
     
