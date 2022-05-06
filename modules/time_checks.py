@@ -22,7 +22,7 @@ def checkEvents(events):
     
     return (first_event_datetime, last_event_datetime)
 
-def isTimeToRemind(events, last_time: datetime) -> (bool, datetime): 
+def isTimeToRemind(events) -> (bool, datetime): 
     now = datetime.now(DEFAULT_TIMEZONE)
     
     if not events: return (False, now)
