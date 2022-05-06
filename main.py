@@ -14,8 +14,8 @@ signal.signal(signal.SIGINT, lambda s, f: os._exit(0))
 def check_events():
     content = {}
     
-    config = config.Config()
-    content['last_time'] = config.last_time
+    conf = config.Config()
+    content['last_time'] = conf.last_time
     
     time_bounds = time_checks.getTimeBounds()
     content['time_bounds'] = time_bounds
