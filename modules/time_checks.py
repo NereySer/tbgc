@@ -8,6 +8,7 @@ def get_event_start_time(event) -> datetime:
     start_time = datetime.fromisoformat(event['start'].get('dateTime', event['start'].get('date')))
     
     print(start_time)
+    print(start_time.tzinfo)
     
     if start_time.tzinfo is None:
         start_time.replace(tzinfo = DEFAULT_TIMEZONE)
