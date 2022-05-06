@@ -5,7 +5,12 @@ LATE_HOUR = 12
 EVENING_HOUR = 17
 
 def get_event_start_time(event) -> datetime:
-    return datetime.fromisoformat(event['start'].get('dateTime', events[0]['start'].get('date')))
+    start_time = datetime.fromisoformat(event['start'].get('dateTime', events[0]['start'].get('date')))
+    
+    if start_time.tzinfo is None
+        start_time.replace(tzinfo = DEFAULT_TIMEZONE)
+        
+    return start_time
 
 def checkEvents(events):
     first_event_datetime = get_event_start_time(events[0])
