@@ -4,12 +4,15 @@ DEFAULT_TIMEZONE = timezone(timedelta(hours=+3))
 LATE_HOUR = 12
 EVENING_HOUR = 17
 
+def get_event_start_time(event) -> datetime:
+    return datetime.fromisoformat(event['start'].get('dateTime', events[0]['start'].get('date')))
+
 def checkEvents(events):
-    first_event_datetime = datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date')))
+    first_event_datetime = get_event_start_time(events[0])
     last_event_datetime = first_event_datetime
     
     for event in events:
-        event_datetime = datetime.fromisoformat(event['start'].get('dateTime', event['start'].get('date')))
+        event_datetime = get_event_start_time(event)
         
         if event_datetime.date() != first_event_datetime.date():
             raise Exception("Events in different days is not allowed")
