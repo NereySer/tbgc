@@ -3,6 +3,8 @@ import signal
 import telebot
 from flask import Flask
 
+from datetime import datetime
+
 from modules import *
 
 bot = telebot.TeleBot(os.getenv('TELEGRAM_BOT_TOKEN'))
