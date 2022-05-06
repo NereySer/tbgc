@@ -7,6 +7,8 @@ EVENING_HOUR = 17
 def get_event_start_time(event) -> datetime:
     start_time = datetime.fromisoformat(event['start'].get('dateTime', event['start'].get('date')))
     
+    print(start_time)
+    
     if start_time.tzinfo is None:
         start_time.replace(tzinfo = DEFAULT_TIMEZONE)
         
@@ -36,6 +38,8 @@ def isTimeToRemind(events) -> (bool, datetime):
     if not events: return (False, now)
     
     (first_event_datetime, last_event_datetime) = checkEvents(events)
+    print(first_event_datetime)
+    print(now)
     if now > first_event_datetime: raise Exception("Events in past is not allowed")
     
     if first_event_datetime.date() > now.date() + timedelta(days = 1): 
