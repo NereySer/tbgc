@@ -22,7 +22,7 @@
     %}Завтра{% 
   else 
     %}{{ datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date'))).strftime('%d.%m') }}{% 
-  endif %}, {{ day_name(datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date'))).strftime('%W')) | int }}
+  endif %}, {{ day_name(datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date'))).strftime('%W') | int) }}
   {% for event in events %}
 {{ datetime.fromisoformat(event['start'].get('dateTime', event['start'].get('date'))).strftime('%H:%M') }} {{ event['summary'] }}
   {% endfor %}
