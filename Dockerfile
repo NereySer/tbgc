@@ -8,8 +8,4 @@ COPY . ./
 
 RUN pip3 install -r requirements.txt
 
-ENV LANG ru_RU.UTF-8
-ENV LANGUAGE ru_RU:en
-ENV LC_ALL ru_RU.UTF-8
-
 CMD python main.py
