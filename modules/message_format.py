@@ -1,4 +1,5 @@
 from jinja2 import Template
+from datetime import datetime
 
 templates = {}
 
@@ -15,7 +16,7 @@ def initTemplate(name: str):
 def telegram(events, now) -> str:
     template = initTemplate('telegram_message')
     
-    return template.render(events=events, now=now)
+    return template.render(events=events, now=now, datetime=datetime)
 
 def web(content, html:bool=True):
     template = initTemplate('raise.html' if html else 'raise')
