@@ -13,6 +13,8 @@ def get_event_start_time(event) -> datetime:
     return start_time
 
 def checkEvents(events, now):
+    if not events: return (now, now)
+
     first_event_datetime = None
     last_event_datetime = None
     events_date = None
