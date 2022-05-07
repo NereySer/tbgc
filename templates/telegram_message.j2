@@ -1,6 +1,13 @@
 {% if events %}
+  {% if now.date() == events[0].date() 
+    %}Сегодня{% 
+  elif now.date() == events[0].date() 
+    %}Завтра{% 
+  else 
+    %}{{ datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date'))).strftime('%d.%m') }}{% 
+  endif %}, {{ datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date'))).strftime('%A') }}
   {% for event in events %}
-{{ event['start'].get('dateTime', event['start'].get('date')) }} {{ event['summary'] }}
+{{ datetime.fromisoformat(event['start'].get('dateTime', event['start'].get('date'))).strftime('%H:%M') }} {{ event['summary'] }}
   {% endfor %}
 {% else %}
 No upcoming events found.
