@@ -92,7 +92,7 @@ jobs:
     - name: Run the image and prepare the Docker container
       run: |
         docker run \
-              -d --rm \
+              -d \
               --name ${DOCKER_CONTAINER_NAME,,} \
               --env PORT=5000 \
               --env TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN \
