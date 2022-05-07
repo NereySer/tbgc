@@ -26,9 +26,9 @@ def generate_event(hour, days_add):
 
 @pytest.mark.parametrize("set_hour, events, exp_raise", [
     (9, [generate_event(10, 0)], False),
-    (11, [generate_event(10, 0)], True),
+    (11, [generate_event(10, 0)], False),
     (9, [generate_event(10, 0), generate_event(11, 0)], False),
-    (9, [generate_event(11, 0), generate_event(10, 0)], True),
+    (9, [generate_event(11, 0), generate_event(10, 0)], False),
     (9, [generate_event(10, 0), generate_event(11, 1)], True),
     (9, [generate_event(-1, 0)], False)
 ])
