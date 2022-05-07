@@ -1,20 +1,23 @@
 {% if events %}
   {% macro day_name(num) -%}
     {% if num == 1 
-      %}Понедельник{%
+      %}понедельник{%
     elif num == 2
-      %}Вторник{%
+      %}вторник{%
     elif num == 3
-      %}Среда{%
+      %}среда{%
     elif num == 4
-      %}Четверг{%
+      %}четверг{%
     elif num == 5
-      %}Пятница{%
+      %}пятница{%
     elif num == 6
-      %}Суббота{%
+      %}суббота{%
     else
-      %}Воскресенье{%
+      %}воскресенье{%
     endif %}
+  {%- endmacro %}
+  {% macro start_time(event) -%}
+    {{ datetime.fromisoformat(event['start'].get('dateTime', event['start'].get('date'))).strftime('%H:%M') }}
   {%- endmacro %}
   {% if diff == 0
     %}Сегодня{% 
@@ -22,10 +25,13 @@
     %}Завтра{% 
   else 
     %}{{ datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date'))).strftime('%d.%m') }}{% 
-  endif %}, {{ day_name(datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date'))).strftime('%W') | int) }}
-  {% for event in events %}
-{{ datetime.fromisoformat(event['start'].get('dateTime', event['start'].get('date'))).strftime('%H:%M') }} {{ event['summary'] }}
-  {% endfor %}
+  endif %}, {{ day_name(datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date'))).strftime('%W') | int) }} {%
+  if len(events) == 1 %} {{ events[0]['summary'] }} в {{ start_time(events[0]) }} {% 
+  else %}
+    {% for event in events %}
+  {{ start_time(event) }} - {{ event['summary'] }}
+    {% endfor %}
+  {% endif %}
 {% else %}
 No upcoming events found.
 {% endif %}
