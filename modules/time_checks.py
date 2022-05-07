@@ -13,7 +13,7 @@ def get_event_start_time(event) -> datetime:
     return start_time
 
 def removeOldEvents(events, now):
-    if not events: return (now, now)
+    if not events: return
 
     for event in events:
         event_datetime = get_event_start_time(event)
@@ -22,7 +22,7 @@ def removeOldEvents(events, now):
             events.remove(event)
 
 def checkEvents(events):
-    if not events: return
+    if not events: return (None, None)
         
     first_event_datetime = get_event_start_time(events[0])
     last_event_datetime = first_event_datetime
