@@ -29,11 +29,13 @@ def checkEvents(events):
     events_date = first_event_datetime.date()
 
     for event in events:
-        first_event_datetime = min(event_datetime, first_event_datetime)
-        last_event_datetime = max(event_datetime, last_event_datetime)
+        event_datetime = get_event_start_time(event)
         
         if event_datetime.date() != events_date:
             raise Exception("Events in different days are not allowed")
+        
+        first_event_datetime = min(event_datetime, first_event_datetime)
+        last_event_datetime = max(event_datetime, last_event_datetime)
         
     return (first_event_datetime, last_event_datetime)
 
