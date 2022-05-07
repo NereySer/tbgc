@@ -21,9 +21,7 @@ def generate_event(hour, text):
     ([
         generate_event(19, 'test'),
         generate_event(20, 'second_test')
-    ], 0, 'Сегодня, вторник
-19:00 - test
-20:00 - second_test')
+    ], 0, 'Сегодня, вторник\n19:00 - test\n20:00 - second_test')
 ])
 def test_work(events, diff, expected):
     message_format.telegram(events, diff) == expected
