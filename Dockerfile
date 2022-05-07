@@ -6,7 +6,7 @@ WORKDIR /src
 
 COPY . ./
 
-RUN pip3 install -r requirements.txt && locale-gen en_US.UTF-8
+RUN pip3 install -r requirements.txt
 
 ENV LANG ru_RU.UTF-8
 ENV LANGUAGE ru_RU:en
