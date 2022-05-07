@@ -44,11 +44,10 @@ def isTimeToRemind(events) -> (bool, datetime):
     
     removeOldEvents(events, now)
     (first_event_datetime, last_event_datetime) = checkEvents(events)
-    if not events: return (False, now)
-    
-    if first_event_datetime.date() > now.date() + timedelta(days = 1): 
+
+    if not events or first_event_datetime.date() > now.date() + timedelta(days = 1): 
         #Day after tomorrow no sense to remind
-        return (False, last_event_datetime)
+        return (False, now)
     
     if first_event_datetime.date() == now.date(): 
         #Today morning reminder OR daytime reminder
