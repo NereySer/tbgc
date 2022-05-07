@@ -12,31 +12,37 @@ def get_event_start_time(event) -> datetime:
         
     return start_time
 
-def checkEvents(events):
-    first_event_datetime = get_event_start_time(events[0])
-    last_event_datetime = first_event_datetime
+def checkEvents(events, now):
+    first_event_datetime = None
+    last_event_datetime = None
+    events_date = None
     
     for event in events:
         event_datetime = get_event_start_time(event)
         
-        if event_datetime.date() != first_event_datetime.date():
-            raise Exception("Events in different days is not allowed")
-        
-        if event_datetime < first_event_datetime:
-            raise Exception("Events should be sorted")
+        if now > event_datetime: 
+            events.remove(event)
             
-        if event_datetime > last_event_datetime:
+            continue
+        
+        if first_event_datetime is None or first_event_datetime > event_datetime:
+            first_event_datetime = event_datetime
+        
+        if last_event_datetime is None or last_event_datetime < event_datetime:
             last_event_datetime = event_datetime
-    
+        
+        if events_date is None:
+            events_date = event_datetime.date()
+        elif event_datetime.date() != events_date:
+            raise Exception("Events in different days are not allowed")
+        
     return (first_event_datetime, last_event_datetime)
 
 def isTimeToRemind(events) -> (bool, datetime): 
     now = datetime.now(DEFAULT_TIMEZONE)
     
+    (first_event_datetime, last_event_datetime) = checkEvents(events, now)
     if not events: return (False, now)
-    
-    (first_event_datetime, last_event_datetime) = checkEvents(events)
-    if now > first_event_datetime: raise Exception("Events in past is not allowed")
     
     if first_event_datetime.date() > now.date() + timedelta(days = 1): 
         #Day after tomorrow no sense to remind
@@ -65,4 +71,3 @@ def getTimeBounds():
         'begin': begin, 
         'end': end    
     }
-
