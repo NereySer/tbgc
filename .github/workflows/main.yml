@@ -125,7 +125,7 @@ jobs:
       run: |
         rm key/civil-hash.json || true
         docker logs ${DOCKER_CONTAINER_NAME,,} || true
-        docker stop ${DOCKER_CONTAINER_NAME,,} || true
+        docker rm -f ${DOCKER_CONTAINER_NAME,,} || true
         docker rmi ${DOCKER_IMAGE_TAG,,} || true
         
   deploy:
