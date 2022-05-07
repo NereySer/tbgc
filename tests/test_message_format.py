@@ -1,14 +1,17 @@
 import pytest
 
 from modules import message_format
+from datetime import datetime, timedelta
 
-@pytest.mark.parametrize("events, expected", [
-    ([{
-        'summary': 'test',
-        'start': {
-            'dateTime': '2022-05-03T19:00:00+03:00'
+@pytest.mark.parametrize("events", [
+    ([
+        {
+            'summary': 'test',
+            'start': {
+                'dateTime': '2022-05-03T19:00:00+03:00'
+            }
         }
-    }], '2022-05-03T19:00:00+03:00 test\n'),
+    ]),
     ([
         {
             'summary': 'test',
@@ -22,8 +25,11 @@ from modules import message_format
                 'dateTime': '2022-05-03T20:00:00+03:00'
             }
         }
-    ], '2022-05-03T19:00:00+03:00 test\n2022-05-03T20:00:00+03:00 second_test\n')
+    ])
 ])
-def test_work(events, expected):
-    assert message_format.telegram(events) == expected
+def test_work(events):
+    now = datetime.now()
     
+    message_format.telegram(events)
+    message_format.telegram(events - timedelta(days = 1))
+    message_format.telegram(events - timedelta(days = 2))
