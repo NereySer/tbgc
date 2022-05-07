@@ -30,6 +30,6 @@ from datetime import datetime, timedelta
 def test_work(events):
     now = datetime.now()
     
-    message_format.telegram(events)
-    message_format.telegram(events - timedelta(days = 1))
-    message_format.telegram(events - timedelta(days = 2))
+    message_format.telegram(events, now)
+    message_format.telegram(events, now - timedelta(days = 1))
+    message_format.telegram(events, now - timedelta(days = 2))
