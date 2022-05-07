@@ -1,7 +1,7 @@
 {% if events %}
-  {% if now.date() == events[0].date() 
+  {% if now.date() == datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date'))).date() 
     %}Сегодня{% 
-  elif now.date() == events[0].date() 
+  elif now.date() == datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date'))).date() 
     %}Завтра{% 
   else 
     %}{{ datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date'))).strftime('%d.%m') }}{% 
