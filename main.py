@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 signal.signal(signal.SIGINT, lambda s, f: os._exit(0))
 
-print(locale.locale_alias)
+print(locale.getlocale())
 locale.setlocale(locale.LC_ALL, 'ru')
 
 @app.route("/")
