@@ -43,7 +43,7 @@ def check_events():
     
     bot.send_message(
         os.getenv('TELEGRAM_CHANNEL_ID'), 
-        message_format.telegram(events, (last_event.date()-now.date()).days())
+        message_format.telegram(events, last_event.date()-now.date())
     )
     conf.last_time = str(last_event)
     
