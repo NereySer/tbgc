@@ -12,7 +12,7 @@ def get_event_start_time(event) -> datetime:
         
     return start_time
 
-def checkEvents(events, now):
+def checkEvents(events, now) -> (datetime, datetime):
     if not events: return (now, now)
 
     first_event_datetime = None
