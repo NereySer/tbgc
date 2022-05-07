@@ -12,9 +12,12 @@ app = Flask(__name__)
 
 signal.signal(signal.SIGINT, lambda s, f: os._exit(0))
 
+class Content(object):
+    pass
+
 @app.route("/")
 def check_events():
-    content = object()
+    content = Content()
     
     content.now = datetime.now(time_checks.DEFAULT_TIMEZONE)
     
