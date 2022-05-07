@@ -7,7 +7,7 @@ def generate_event(hour, text):
     return {
         'summary': text,
         'start': {
-            'dateTime': "2022-05-03T$(hour):00:00+03:00"
+            'dateTime': f"2022-05-03T{hour}:00:00+03:00"
         }
     }
     
