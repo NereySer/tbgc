@@ -113,15 +113,15 @@ jobs:
         
         if [[ ${HTTP_CODE} -lt 200 || ${HTTP_CODE} -gt 299 ]] ; then
           echo HTTP code: $HTTP_CODE
-          docker logs ${DOCKER_CONTAINER_NAME,,}
           exit 22
         fi
     - name: Clear all
       if: always()
       run: |
         rm key/civil-hash.json || true
+        docker logs ${DOCKER_CONTAINER_NAME,,} || true
         docker stop ${DOCKER_CONTAINER_NAME,,} || true
-        docker rmi ${DOCKER_IMAGE_TAG,,}
+        docker rmi ${DOCKER_IMAGE_TAG,,} || true
         
   deploy:
     name: Deploy to Heroku
