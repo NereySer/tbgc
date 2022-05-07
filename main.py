@@ -12,7 +12,7 @@ bot = telebot.TeleBot(os.getenv('TELEGRAM_BOT_TOKEN'))
 app = Flask(__name__)
 
 signal.signal(signal.SIGINT, lambda s, f: os._exit(0))
-locale.setlocale(locale.LC_TIME, ('ru_RU', 'UTF-8'))
+locale.setlocale(locale.LC_ALL, ('ru_RU', 'UTF-8'))
 
 @app.route("/")
 def check_events():
