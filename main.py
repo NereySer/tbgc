@@ -29,14 +29,11 @@ def check_events():
     
     content.isTime, content.last_event = time_checks.isTimeToRemind(content.events)
     
-    print(content.config.last_time)
     content.should_remind = content.isTime and datetime.fromisoformat(content.config.last_time) < content.last_event
     
     if content.should_remind:
-        bot.send_message(
-            os.getenv('TELEGRAM_CHANNEL_ID'), 
-            message_format.telegram(content.events, (content.last_event.date()-content.now.date()).days)
-        )
+        bot.send_message( os.getenv('TELEGRAM_CHANNEL_ID'), message_format.telegram(content.events, (content.last_event.date()-content.now.date()).days))
+        
         content.config.last_time = str(content.last_event)
     
     return message_format.web(content)
