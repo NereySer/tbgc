@@ -14,7 +14,7 @@ signal.signal(signal.SIGINT, lambda s, f: os._exit(0))
 
 @app.route("/")
 def check_events():
-    content = object
+    content = object()
     
     content.now = datetime.now(time_checks.DEFAULT_TIMEZONE)
     
