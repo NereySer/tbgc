@@ -12,30 +12,27 @@ def get_event_start_time(event) -> datetime:
         
     return start_time
 
-def checkEvents(events, now) -> (datetime, datetime):
+def removeOldEvents(events, now):
     if not events: return (now, now)
 
-    first_event_datetime = None
-    last_event_datetime = None
-    events_date = None
-    
     for event in events:
         event_datetime = get_event_start_time(event)
         
         if now > event_datetime: 
             events.remove(event)
-            
-            continue
+
+def checkEvents(events):
+    if not events: return
         
-        if first_event_datetime is None or first_event_datetime > event_datetime:
-            first_event_datetime = event_datetime
+    first_event_datetime = get_event_start_time(events[0])
+    last_event_datetime = first_event_datetime
+    events_date = first_event_datetime.date()
+
+    for event in events:
+        first_event_datetime = min(event_datetime, first_event_datetime)
+        last_event_datetime = max(event_datetime, last_event_datetime)
         
-        if last_event_datetime is None or last_event_datetime < event_datetime:
-            last_event_datetime = event_datetime
-        
-        if events_date is None:
-            events_date = event_datetime.date()
-        elif event_datetime.date() != events_date:
+        if event_datetime.date() != events_date:
             raise Exception("Events in different days are not allowed")
         
     return (first_event_datetime, last_event_datetime)
@@ -43,6 +40,7 @@ def checkEvents(events, now) -> (datetime, datetime):
 def isTimeToRemind(events) -> (bool, datetime): 
     now = datetime.now(DEFAULT_TIMEZONE)
     
+    removeOldEvents(events, now)
     (first_event_datetime, last_event_datetime) = checkEvents(events, now)
     if not events: return (False, now)
     
