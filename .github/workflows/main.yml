@@ -29,8 +29,8 @@ jobs:
     steps:
     - name: Set locale
       env: 
-        LC_ALL: "ru_RU.UTF-8"
-        LC_CTYPE: "ru_RU.UTF-8"
+        LC_ALL: "en_US.UTF-8"
+        LC_CTYPE: "en_US.UTF-8"
       run: dpkg-reconfigure locales
     - uses: actions/checkout@v3
     - name: Install dependencies
