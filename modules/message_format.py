@@ -13,10 +13,10 @@ def initTemplate(name: str):
     
     return templates[name]
 
-def telegram(events, now) -> str:
+def telegram(events, diff) -> str:
     template = initTemplate('telegram_message')
     
-    return template.render(events=events, now=now, datetime=datetime)
+    return template.render(events=events, diff=diff, datetime=datetime)
 
 def web(content, html:bool=True):
     template = initTemplate('raise.html' if html else 'raise')
