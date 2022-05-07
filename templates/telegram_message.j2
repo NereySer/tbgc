@@ -1,4 +1,6 @@
 {% if events %}
+{{ now.date() }}
+{{ datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date'))).date() }}
   {% if now.date() == datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date'))).date() 
     %}Сегодня{% 
   elif now.date() == datetime.fromisoformat(events[0]['start'].get('dateTime', events[0]['start'].get('date'))).date() 
