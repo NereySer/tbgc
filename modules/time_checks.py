@@ -41,7 +41,7 @@ def isTimeToRemind(events) -> (bool, datetime):
     now = datetime.now(DEFAULT_TIMEZONE)
     
     removeOldEvents(events, now)
-    (first_event_datetime, last_event_datetime) = checkEvents(events, now)
+    (first_event_datetime, last_event_datetime) = checkEvents(events)
     if not events: return (False, now)
     
     if first_event_datetime.date() > now.date() + timedelta(days = 1): 
