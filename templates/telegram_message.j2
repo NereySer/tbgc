@@ -16,9 +16,7 @@
   {%- if events|length== 1 -%}
     , {{ events[0]['summary'] }} в {{ start_time(events[0], datetime) }} 
   {%- else %}
-
     {% for event in events %}
-      
       {# newline #}
       {{- start_time(event, datetime) }} - {{ event['summary'] -}}
     {% endfor %}
