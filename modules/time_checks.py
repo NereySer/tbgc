@@ -45,18 +45,20 @@ def isTimeToRemind(events) -> (bool, datetime):
     removeOldEvents(events, now)
     (first_event_datetime, last_event_datetime) = checkEvents(events)
 
-    if not events or first_event_datetime.date() > now.date() + timedelta(days = 1): 
-        #Day after tomorrow no sense to remind
+    if not events: 
         return (False, now)
+        #Day after tomorrow no sense to remind
     
-    if first_event_datetime.date() == now.date(): 
-        #Today morning reminder OR daytime reminder
-        return (first_event_datetime.hour < EVENING_HOUR or now.hour >= LATE_HOUR - 1, last_event_datetime)
-    else:
-        #Evening reminder for early tomorrow events
-        return (now.hour > LATE_HOUR and first_event_datetime.hour < LATE_HOUR, last_event_datetime)
+    diff = (first_event_datetime.date() - now.date()).days
     
-    raise Exception("Something wrong occured")
+    return (
+        (
+            #Today morning reminder OR daytime reminder
+            (diff == 0 and (first_event_datetime.hour < EVENING_HOUR or now.hour >= LATE_HOUR - 1)) or 
+            #Evening reminder for early tomorrow events
+            (diff == 1 and now.hour > LATE_HOUR and first_event_datetime.hour < LATE_HOUR)
+        ), 
+        last_event_datetime)
 
 def getTimeBounds():
     begin = datetime.now(DEFAULT_TIMEZONE)
