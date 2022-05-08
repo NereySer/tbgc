@@ -45,6 +45,7 @@ jobs:
         TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_ID}}
         GOOGLE_CALENDAR_ID: ${{secrets.GOOGLE_CALENDAR_ID}}      
         DATABASE_URL: postgres://postgres:postgres@postgres/postgres
+        CHECK_KEY: ${{secrets.CHECK_KEY}}
     - name: Clear all
       if: always()
       run: |
@@ -93,6 +94,7 @@ jobs:
               --env TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN \
               --env TELEGRAM_CHANNEL_ID=$TELEGRAM_CHANNEL_ID \
               --env GOOGLE_CALENDAR_ID=$GOOGLE_CALENDAR_ID \
+              --env CHECK_KEY=$CHECK_KEY \
               --env DATABASE_URL=postgres://postgres:postgres@$(hostname -I | awk '{print $1}'):${{ job.services.postgres.ports[5432] }}/postgres \
               ${DOCKER_IMAGE_TAG,,}
         docker exec \
@@ -104,6 +106,7 @@ jobs:
         TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
         TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_ID}}
         GOOGLE_CALENDAR_ID: ${{secrets.GOOGLE_CALENDAR_ID}}      
+        CHECK_KEY: ${{secrets.CHECK_KEY}}
     - name: Test the Docker container
       run: |
         HTTP_CODE=$(docker exec \
@@ -154,6 +157,7 @@ jobs:
         HD_TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
         HD_TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_ID}}
         HD_GOOGLE_CALENDAR_ID: ${{secrets.GOOGLE_CALENDAR_ID}}
+        HD_CHECK_KEY: ${{secrets.CHECK_KEY}}
     - name: Clear all
       if: always()
       run: |
