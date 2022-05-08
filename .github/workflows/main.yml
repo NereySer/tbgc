@@ -107,11 +107,22 @@ jobs:
         TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_ID}}
         GOOGLE_CALENDAR_ID: ${{secrets.GOOGLE_CALENDAR_ID}}      
         CHECK_KEY: ${{secrets.CHECK_KEY}}
+    - name: Test denied access
+      run: |
+        HTTP_CODE=$(docker exec \
+              ${DOCKER_CONTAINER_NAME,,} \
+              bash -c 'curl -sL -o /dev/null -w "%{http_code}" http://localhost:5000/check_events' \
+        ); \
+        
+        if [[ ${HTTP_CODE} -ne 404 ]] ; then
+          echo Wrong HTTP code: $HTTP_CODE
+          exit 22
+        fi
     - name: Test the Docker container
       run: |
         HTTP_CODE=$(docker exec \
               ${DOCKER_CONTAINER_NAME,,} \
-              bash -c 'curl -sL -o /dev/null -w "%{http_code}" http://localhost:5000/' \
+              bash -c 'curl -sL -o /dev/null -w "%{http_code}" http://localhost:5000/check_events?key=${CHECK_KEY}' \
         ); \
         
         if [[ ${HTTP_CODE} -lt 200 || ${HTTP_CODE} -gt 299 ]] ; then
