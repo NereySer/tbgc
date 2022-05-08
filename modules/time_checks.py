@@ -58,9 +58,9 @@ def isTimeToRemind(events) -> (bool, datetime):
     
     match (first_event_datetime.date() - now.date()).days:
         case 0:
-            return (isTodayTimeTiRemind(first_event_datetime, now)), last_event_datetime)
+            return (isTodayTimeTiRemind(first_event_datetime, now), last_event_datetime)
         case 1:
-            return (isTomorrowTimeTiRemind(first_event_datetime, now)), last_event_datetime)
+            return (isTomorrowTimeTiRemind(first_event_datetime, now), last_event_datetime)
         case _:
             return (False, last_event_datetime)
 
