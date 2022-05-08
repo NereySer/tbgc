@@ -56,14 +56,13 @@ def isTimeToRemind(events) -> (bool, datetime):
     if not events: 
         return (False, now)
     
-    diff = (first_event_datetime.date() - now.date()).days
-    
-    return (
-        (
-            (diff == 0 and isTodayTimeTiRemind(first_event_datetime, now)) or 
-            (diff == 1 and isTomorrowTimeTiRemind(first_event_datetime, now))
-        ), 
-        last_event_datetime)
+    match (first_event_datetime.date() - now.date()).days:
+        case 0:
+            return (isTodayTimeTiRemind(first_event_datetime, now)), last_event_datetime)
+        case 1:
+            return (isTomorrowTimeTiRemind(first_event_datetime, now)), last_event_datetime)
+        case _:
+            return (False, last_event_datetime)
 
 def getTimeBounds():
     begin = datetime.now(DEFAULT_TIMEZONE)
