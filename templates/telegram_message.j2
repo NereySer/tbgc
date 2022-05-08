@@ -18,6 +18,7 @@
   {%- else %}
 
     {% for event in events %}
+      
       {# newline #}
       {{- start_time(event, datetime) }} - {{ event['summary'] -}}
     {% endfor %}
