@@ -111,7 +111,7 @@ jobs:
       run: |
         HTTP_CODE=$(docker exec \
               ${DOCKER_CONTAINER_NAME,,} \
-              bash -c 'curl -sL -o /dev/null -w "%{http_code}" http://localhost:5000/check_events' \
+              bash -c 'curl -sL -o /dev/null -w "%{http_code}" http://localhost:5000/check_events?key=WRONG_KEY' \
         ); \
         
         if [[ ${HTTP_CODE} -ne 404 ]] ; then
