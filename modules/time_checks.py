@@ -39,6 +39,14 @@ def checkEvents(events):
         
     return (first_event_datetime, last_event_datetime)
 
+def isTodayTimeTiRemind(first_event_datetime, now):
+    #Today morning reminder OR daytime reminder
+    return first_event_datetime.hour < EVENING_HOUR or now.hour >= LATE_HOUR - 1
+
+def isTomorrowTimeTiRemind(first_event_datetime, now):
+    #Evening reminder for early tomorrow events
+    return now.hour > LATE_HOUR and first_event_datetime.hour < LATE_HOUR
+
 def isTimeToRemind(events) -> (bool, datetime): 
     now = datetime.now(DEFAULT_TIMEZONE)
     
@@ -47,16 +55,13 @@ def isTimeToRemind(events) -> (bool, datetime):
 
     if not events: 
         return (False, now)
-        #Day after tomorrow no sense to remind
     
     diff = (first_event_datetime.date() - now.date()).days
     
     return (
         (
-            #Today morning reminder OR daytime reminder
-            (diff == 0 and (first_event_datetime.hour < EVENING_HOUR or now.hour >= LATE_HOUR - 1)) or 
-            #Evening reminder for early tomorrow events
-            (diff == 1 and now.hour > LATE_HOUR and first_event_datetime.hour < LATE_HOUR)
+            (diff == 0 and isTodayTimeTiRemind(first_event_datetime, now)) or 
+            (diff == 1 and isTomorrowTimeTiRemind(first_event_datetime, now))
         ), 
         last_event_datetime)
 
