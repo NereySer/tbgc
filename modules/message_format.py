@@ -20,26 +20,19 @@ def initTemplate(name: str):
     
     return templates[name]
 
-def findCommon(list1, list2, strict) -> (bool, list):
-    if len(list1) < len(list2):
-        if strict:
-            list1.pop()
+def findCommon(list1, list2) -> (bool, list):
+    retVal = []
+    equal = len(list1) == len(list2)
 
-        strict = False
+    for i in range(min(len(list1), len(list2))):
+        if list1[i] == list2[i]:
+            retVal.append(list1[i])
+        else:
+            equal = False
 
-    if len(list1) > len(list2):
-        strict = False
-        while len(list1) >= len(list2):
-            list1.pop()
+            break
 
-    for i, part in enumerate(list1):
-        if part != list2[i]:
-            while len(list1) > i:
-                list1.pop()
-
-            strict = False
-     
-    return (strict, list1)
+    return (equal, retVal)
 
 def cutSummary(events, num):
     retEvents = []
@@ -58,10 +51,21 @@ def splitCommonSummary(events):
     pattern = re.compile('(?<=(?:- )|(?:, )|(?:: ))')
 
     for event in events:
+        event_summary = pattern.split(event['summary'])
+
         if total_summary == None:
-            total_summary = pattern.split(event['summary'])
+            total_summary = event_summary
         else:
-            summaries_equal, total_summary = findCommon(total_summary, pattern.split(event['summary']), summaries_equal)
+            equal, common = findCommon(total_summary, event_summary)
+
+            if (
+                (equal != summaries_equal and len(common) == len(total_summary)) or
+                (not equal and len(common) == len(event_summary))
+            ):
+                common.pop()
+
+            summaries_equal &= equal
+            total_summary = common
 
     total_summary = ''.join(total_summary)
 
