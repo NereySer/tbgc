@@ -21,7 +21,7 @@ def initTemplate(name: str):
     return templates[name]
 
 def getSlicedSummaries(events):
-    pattern = re.compile('(?<=(?:- )|(?:, )|(?:: ))')
+    pattern = re.compile('(?<=(?:- )|(?:, )|(?:: ))(?=.)')
 
     retVal = []
 
