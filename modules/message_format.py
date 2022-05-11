@@ -20,6 +20,38 @@ def initTemplate(name: str):
     
     return templates[name]
 
+def findCommon(list1, list2, strict) -> (bool, list):
+    if len(list1) < len(list2):
+        if strict:
+            list1.pop()
+
+        strict = False
+
+    if len(list1) > len(list2):
+        strict = False
+        while len(list1) >= len(list2):
+            list1.pop()
+
+    for i, part in enumerate(list1):
+        if part != list2[i]:
+            while len(list1) > i:
+                list1.pop()
+
+            strict = False
+     
+    return (strict, list1)
+
+def cutSummary(events, num):
+    retEvents = []
+    for event in events:
+        event = event.copy()
+
+        event['summary'] = event['summary'][num:]
+
+        retEvents.append(event)
+        
+    return retEvents
+
 def splitCommonSummary(events):
     total_summary = None
     summaries_equal = True
@@ -29,35 +61,11 @@ def splitCommonSummary(events):
         if total_summary == None:
             total_summary = pattern.split(event['summary'])
         else:
-            event_summary = pattern.split(event['summary'])
-
-            if len(total_summary) < len(event_summary):
-                if summaries_equal:
-                    total_summary.pop()
-
-                summaries_equal = False
-
-            if len(total_summary) > len(event_summary):
-                summaries_equal = False
-                while len(total_summary) >= len(event_summary):
-                    total_summary.pop()
-
-            for i, part in enumerate(total_summary):
-                if part != event_summary[i]:
-                    while len(total_summary) > i:
-                        total_summary.pop()
-
-                    summaries_equal = False
+            summaries_equal, total_summary = findCommon(total_summary, pattern.split(event['summary']), summaries_equal)
 
     total_summary = ''.join(total_summary)
 
-    retEvents = []
-    for event in events:
-        event = event.copy()
-
-        event['summary'] = event['summary'][len(total_summary):]
-
-        retEvents.append(event)
+    retEvents = cutSummary(events, len(total_summary))
 
     if not summaries_equal:
         total_summary = total_summary.strip()[:-1]
