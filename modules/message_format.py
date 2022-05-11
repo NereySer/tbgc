@@ -20,19 +20,38 @@ def initTemplate(name: str):
     
     return templates[name]
 
-def findCommon(list1, list2) -> (bool, list):
+def getSlicedSummaries(events):
+    pattern = re.compile('(?<=(?:- )|(?:, )|(?:: ))')
+
     retVal = []
-    equal = len(list1) == len(list2)
+
+    for event in events:
+        retVal.append(pattern.split(event['summary']))
+
+    return retVal
+
+
+def findCommon(list):
+    if not list:
+        return list
+
+    retVal = list[0].copy()
+
+    for i in range(1, len(list)):
+        retVal = _getCommonTwo(retVal, list[i])
+
+    return retVal
+
+def _getCommonTwo(list1, list2) -> list:
+    retVal = []
 
     for i in range(min(len(list1), len(list2))):
         if list1[i] == list2[i]:
             retVal.append(list1[i])
         else:
-            equal = False
-
             break
 
-    return (equal, retVal)
+    return retVal
 
 def cutSummary(events, num):
     retEvents = []
@@ -42,32 +61,38 @@ def cutSummary(events, num):
         event['summary'] = event['summary'][num:]
 
         retEvents.append(event)
-        
+
     return retEvents
 
+def getMinMaxLen(list):
+    if not list:
+        return (0, 0)
+
+    minLen = len(list[0])
+    maxLen = minLen
+
+    for i in range(1, len(list)):
+        minLen = min(minLen, len(list[i]))
+        maxLen = max(maxLen, len(list[i]))
+
+    return (minLen, maxLen)
+
 def splitCommonSummary(events):
-    total_summary = None
-    summaries_equal = True
-    pattern = re.compile('(?<=(?:- )|(?:, )|(?:: ))')
+    summaries = getSlicedSummaries(events)
 
-    for event in events:
-        event_summary = pattern.split(event['summary'])
+    common_summary = findCommon(summaries)
 
-        if total_summary == None:
-            total_summary = event_summary
+    minLen, maxLen = getMinMaxLen(summaries)
+
+    summaries_equal = False
+
+    if len(common_summary) == minLen:
+        if minLen == maxLen:
+            summaries_equal = True
         else:
-            equal, common = findCommon(total_summary, event_summary)
+            common_summary.pop()
 
-            if (
-                (equal != summaries_equal and len(common) == len(total_summary)) or
-                (not equal and len(common) == len(event_summary))
-            ):
-                common.pop()
-
-            summaries_equal &= equal
-            total_summary = common
-
-    total_summary = ''.join(total_summary)
+    common_summary = ''.join(common_summary)
 
     retEvents = cutSummary(events, len(total_summary))
 
