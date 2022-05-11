@@ -36,6 +36,16 @@ def generate_event(hour, text):
     ([
         generate_event(19, 'test - first'),
         generate_event(20, 'test - second_test')
+    ], 0, 'Сегодня, вторник, test\n19:00 - first\n20:00 - second_test'),
+    ([
+        generate_event(19, 'test - t - first'),
+        generate_event(20, 'test - t - second_test'),
+        generate_event(21, 'test - 3_test'),
+        generate_event(22, 'test - 4_test')
+    ], 0, 'Сегодня, вторник, test\n19:00 - t - first\n20:00 - t - second_test\n21:00 - 3_test\n22:00 - 4_test'),
+    ([
+        generate_event(19, 'test: first'),
+        generate_event(20, 'test: second_test')
     ], 0, 'Сегодня, вторник, test\n19:00 - first\n20:00 - second_test')
 ])
 def test_work(events, diff, expected):
