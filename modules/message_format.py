@@ -94,12 +94,12 @@ def splitCommonSummary(events):
 
     common_summary = ''.join(common_summary)
 
-    retEvents = cutSummary(events, len(total_summary))
+    retEvents = cutSummary(events, len(common_summary))
 
     if not summaries_equal:
-        total_summary = total_summary.strip()[:-1]
+        common_summary = common_summary.strip()[:-1]
 
-    return (total_summary.strip(), retEvents)
+    return (common_summary.strip(), retEvents)
 
 def telegram(events, diff) -> str:
     total_summary, events = splitCommonSummary(events)
