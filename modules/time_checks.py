@@ -77,7 +77,7 @@ def whenTimeToRemind(events) -> datetime:
     for day_offset in range(0, 2):
         test_time = get_event_start_time(events[0]).replace(minute = 0, second = 0, microsecond = 0) - timedelta(days = day_offset)
         
-        for hour it reversed(NOTIFICATIONS_HOURS):
+        for hour in reversed(NOTIFICATIONS_HOURS):
             test_time = test_time.replace(hour = hour)
 
             if isTimeToRemind(events, test_time)[0]:
