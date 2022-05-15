@@ -24,8 +24,12 @@ def show_next_notification():
     content.config = config.Config()
 
     content.time_bounds = time_checks.getTimeBounds(datetime.fromisoformat(content.config.last_time))
+    
+    n=0
 
     while not (events := g_cal.get_incomig_events( *content.time_bounds )):
+        n+=1
+        if n>10: break
         if content.time_bounds[0] - content.now > timedelta(days = 7):
             break
             
@@ -33,7 +37,8 @@ def show_next_notification():
             time_checks.setDateToBeginOfDay(content.time_bounds[0] + timedelta(days = 1)),
             content.time_bounds[1] + timedelta(days = 1)
         )
-        
+    
+    print(n)
     if events:
         content.notification = message_format.telegram(events, (content.last_event.date()-content.now.date()).days)
         
