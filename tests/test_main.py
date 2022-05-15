@@ -1,4 +1,5 @@
 import main, os
+from tests import test_time_checks
 
 def test_raising():
     tester = main.app.test_client()
@@ -16,11 +17,20 @@ def test_notifications(monkeypatch):
     assert response.status_code >= 200 and response.status_code <= 299
     
     print(response.text)
+    
+    mock_events = []
 
     def mock_g_cal_get_incomig_events(begin, end):
-        return []
+        return mock_events
     
     monkeypatch.setattr(main.g_cal, 'get_incomig_events', mock_g_cal_get_incomig_events)
+
+    response = tester.get('/')
+    assert response.status_code >= 200 and response.status_code <= 299
+    
+    print(response.text)
+
+    mock_events = [test_time_checks.generate_event(10, 0)]
 
     response = tester.get('/')
     assert response.status_code >= 200 and response.status_code <= 299
