@@ -51,7 +51,7 @@ def isTomorrowTimeToRemind(first_event_datetime, now):
 def isTimeToRemind(events, date = None) -> (bool, datetime): 
     if date is None:
         now = datetime.now(DEFAULT_TIMEZONE)
-    else
+    else:
         now = date
     
     removeOldEvents(events, now)
