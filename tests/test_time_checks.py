@@ -124,7 +124,7 @@ def test_isTimeToRemind_with_date_single_event(monkeypatch, set_hour, events, ex
     ([generate_event(17, 2)], 12, 2)
 ])
 def test_whenTimeToRemind(events, expected_hour, expected_day_diff):
-    assert whenTimeToRemind(events) == datetime.now(DEFAULT_TIMEZONE).replace(hour=expected_hour, minute = 0, second = 0, microsecond = 0) + timedelta(days = expected_day_diff)
+    assert time_checks.whenTimeToRemind(events) == datetime.now(DEFAULT_TIMEZONE).replace(hour=expected_hour, minute = 0, second = 0, microsecond = 0) + timedelta(days = expected_day_diff)
     
 @pytest.mark.parametrize("set_hour", [9, 10, 12, 13, 23])
 def test_time_bounds(monkeypatch, set_hour):
