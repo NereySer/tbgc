@@ -15,6 +15,20 @@ signal.signal(signal.SIGINT, lambda s, f: os._exit(0))
 class Content(object):
     pass
 
+def getNextEvents(now, begin_time):
+    time_bounds = time_checks.getTimeBounds(max(now, begin_time))
+    
+    while not (events := g_cal.get_incomig_events( *time_bounds )):
+        if time_bounds[0] - now > timedelta(days = 7):
+            break
+            
+        time_bounds = (
+            time_checks.setDateToBeginOfDay(time_bounds[0] + timedelta(days = 1)),
+            time_bounds[1] + timedelta(days = 1)
+        )
+        
+    return events
+
 @app.route("/")
 def show_next_notification():
     content = Content()
@@ -23,16 +37,7 @@ def show_next_notification():
     
     content.config = config.Config()
 
-    content.time_bounds = time_checks.getTimeBounds(max(content.now, datetime.fromisoformat(content.config.last_time)))
-    
-    while not (events := g_cal.get_incomig_events( *content.time_bounds )):
-        if content.time_bounds[0] - content.now > timedelta(days = 7):
-            break
-            
-        content.time_bounds = (
-            time_checks.setDateToBeginOfDay(content.time_bounds[0] + timedelta(days = 1)),
-            content.time_bounds[1] + timedelta(days = 1)
-        )
+    events = getNextEvents(content.now, datetime.fromisoformat(content.config.last_time))
     
     if events:
         content.time = time_checks.whenTimeToRemind(events)
