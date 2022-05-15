@@ -1,5 +1,5 @@
 import main, os
-from tests import test_time_checks
+from tests import test_message_format
 
 def test_raising():
     tester = main.app.test_client()
@@ -30,7 +30,7 @@ def test_notifications(monkeypatch):
     
     print(response.text)
 
-    mock_events = [test_time_checks.generate_event(10, 0)]
+    mock_events = [test_message_format.generate_event(10, 'test event')]
 
     response = tester.get('/')
     assert response.status_code >= 200 and response.status_code <= 299
