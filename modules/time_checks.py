@@ -94,9 +94,6 @@ def whenTimeToRemind(events) -> datetime:
         elif notification_time is not None:        
             break
         
-    if notification_time is None:
-        raise Exception("Internal error: can't find when to notify")
-    
     return notification_time
 
 def setDateToBeginOfDay(date):
