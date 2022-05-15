@@ -49,7 +49,7 @@ def isTomorrowTimeToRemind(first_event_datetime, now):
     return now.hour > LATE_HOUR and first_event_datetime.hour < LATE_HOUR
 
 def isTimeToRemind(events, date = None) -> (bool, datetime): 
-    if date is None
+    if date is None:
         now = datetime.now(DEFAULT_TIMEZONE)
     else
         now = date
