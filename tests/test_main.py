@@ -36,3 +36,5 @@ def test_notifications(monkeypatch):
     assert response.status_code >= 200 and response.status_code <= 299
     
     print(response.text)
+
+    assert False
