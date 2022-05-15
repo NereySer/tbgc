@@ -80,7 +80,7 @@ def whenTimeToRemind(events) -> datetime:
         for hour in reversed(NOTIFICATIONS_HOURS):
             test_time = test_time.replace(hour = hour)
 
-            if isTimeToRemind(events, test_time)[0]:
+            if isTimeToRemind(events.copy(), test_time)[0]:
                 notification_time = test_time
             elif notification_time is not None:
                 break
