@@ -40,9 +40,9 @@ def show_next_notification():
     
     print(n)
     if events:
-        content.notification = message_format.telegram(events, content.time_bounds[0])
+        content.notification = message_format.telegram(events)
         
-        content.time = now
+        content.time = content.time_bounds[0]
         
     return message_format.notifications(content)
         
