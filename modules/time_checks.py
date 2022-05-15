@@ -49,10 +49,7 @@ def isTomorrowTimeToRemind(first_event_datetime, now):
     return now.hour > LATE_HOUR and first_event_datetime.hour < LATE_HOUR
 
 def isTimeToRemind(events, date = None) -> (bool, datetime): 
-    if date is None:
-        now = datetime.now(DEFAULT_TIMEZONE)
-    else:
-        now = date
+    now = datetime.now(DEFAULT_TIMEZONE) if date is None else date
     
     removeOldEvents(events, now)
     (first_event_datetime, last_event_datetime) = checkEvents(events)
@@ -68,6 +65,19 @@ def isTimeToRemind(events, date = None) -> (bool, datetime):
         case _:
             return (False, last_event_datetime)
 
+def whenHourToRemind(events, date) -> datetime:
+    notification_time = None
+    
+    for hour in reversed(NOTIFICATIONS_HOURS):
+        test_time = date.replace(hour = hour)
+
+        if isTimeToRemind(events.copy(), test_time)[0]:
+            notification_time = test_time
+        elif notification_time is not None:
+            break
+
+    return notification_time
+        
 def whenTimeToRemind(events) -> datetime:
     if not events:
         raise Exception("No events provided")
@@ -77,17 +87,13 @@ def whenTimeToRemind(events) -> datetime:
     for day_offset in range(0, 2):
         test_time = get_event_start_time(events[0]).replace(minute = 0, second = 0, microsecond = 0) - timedelta(days = day_offset)
         
-        for hour in reversed(NOTIFICATIONS_HOURS):
-            test_time = test_time.replace(hour = hour)
-
-            if isTimeToRemind(events.copy(), test_time)[0]:
-                notification_time = test_time
-            elif notification_time is not None:
+        test_time = whenHourToRemind(events, test_time)
+        
+        if test_time is None:
+            if notification_time is not None:        
                 break
         else:
-            continue
-
-        break
+            notification_time = test_time
         
     if notification_time is None:
         raise Exception("Internal error: can't find when to notify")
