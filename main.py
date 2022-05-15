@@ -25,7 +25,7 @@ def show_next_notification():
 
     content.time_bounds = time_checks.getTimeBounds(datetime.fromisoformat(content.config.last_time))
 
-    while not content.events = g_cal.get_incomig_events( *content.time_bounds ):
+    while not (content.events := g_cal.get_incomig_events( *content.time_bounds )):
         if content.time_bounds[0] - content.now > timedelta(days = 7):
             break
             
