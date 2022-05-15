@@ -29,8 +29,10 @@ def show_next_notification():
         if content.time_bounds[0] - content.now > timedelta(days = 7):
             break
             
-        content.time_bounds[0] = time_checks.setDateToBeginOfDay(content.time_bounds[0] + timedelta(days = 1))
-        content.time_bounds[1] = content.time_bounds[1] + timedelta(days = 1)
+        content.time_bounds = (
+            time_checks.setDateToBeginOfDay(content.time_bounds[0] + timedelta(days = 1)),
+            content.time_bounds[1] + timedelta(days = 1)
+        )
         
     if events:
         content.notification = message_format.telegram(events, (content.last_event.date()-content.now.date()).days)
