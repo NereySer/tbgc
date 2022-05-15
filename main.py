@@ -40,7 +40,7 @@ def show_next_notification():
     
     print(n)
     if events:
-        content.notification = message_format.telegram(events, (content.last_event.date()-content.now.date()).days)
+        content.notification = message_format.telegram(events, content.time_bounds[0])
         
         content.time = now
         
