@@ -89,11 +89,10 @@ def whenTimeToRemind(events) -> datetime:
         
         test_time = whenHourToRemind(events, test_time)
         
-        if test_time is None:
-            if notification_time is not None:        
-                break
-        else:
+        if test_time is not None:
             notification_time = test_time
+        elif notification_time is not None:        
+            break
         
     if notification_time is None:
         raise Exception("Internal error: can't find when to notify")
