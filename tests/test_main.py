@@ -17,7 +17,7 @@ def test_notifications(monkeypatch):
     
     print(response.text)
 
-    def mock_g_cal_get_incomig_events(begin: datetime, end: datetime):
+    def mock_g_cal_get_incomig_events(begin, end):
         return []
     
     monkeypatch.setattr(main.g_cal, 'get_incomig_events', mock_g_cal_get_incomig_events)
