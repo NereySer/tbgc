@@ -3,7 +3,7 @@ import signal
 import telebot
 from flask import Flask, request
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from modules import *
 
@@ -15,6 +15,30 @@ signal.signal(signal.SIGINT, lambda s, f: os._exit(0))
 class Content(object):
     pass
 
+@app.route("/")
+def show_next_notification():
+    content = Content()
+    
+    content.now = datetime.now(time_checks.DEFAULT_TIMEZONE)
+    
+    content.config = config.Config()
+
+    content.time_bounds = time_checks.getTimeBounds(datetime.fromisoformat(content.config.last_time))
+
+    while not content.events = g_cal.get_incomig_events( *content.time_bounds ):
+        if content.time_bounds[0] - content.now > timedelta(days = 7):
+            break
+            
+        content.time_bounds[0] = time_checks.setDateToBeginOfDay(content.time_bounds[0] + timedelta(days = 1))
+        content.time_bounds[1] = content.time_bounds[1] + timedelta(days = 1)
+        
+    if content.events:
+        content.notification = message_format.telegram(content.events, (content.last_event.date()-content.now.date()).days))
+        
+        content.time = now
+        
+    return message_format.notifications(content)
+        
 @app.route("/check_events")
 def check_events():
     if os.getenv('CHECK_KEY') != request.args.get('key', default = '', type = str):
@@ -39,7 +63,7 @@ def check_events():
         
         content.config.last_time = str(content.last_event)
     
-    return message_format.web(content)
+    return message_format.raise_notification(content)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=os.getenv('PORT')) # port 5000 is the default
