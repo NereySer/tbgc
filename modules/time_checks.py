@@ -64,13 +64,19 @@ def isTimeToRemind(events) -> (bool, datetime):
         case _:
             return (False, last_event_datetime)
 
-def getTimeBounds():
-    begin = datetime.now(DEFAULT_TIMEZONE)
+def setDateToBeginOfDay(date):
+    return date.replace(hour=0, minute=0, second=0, microsecond=0)
+        
+def getTimeBounds(start = None):
+    if start is None:
+        begin = datetime.now(DEFAULT_TIMEZONE)
+    else:
+        begin = start
 
     if begin.hour > LATE_HOUR:
         #Too late to remind about today's events, so let's look for tomorrow
         begin += timedelta(days = 1)
-        begin = begin.replace(hour=0, minute=0, second=0, microsecond=0)
+        begin = setDateToBeginOfDay(begin)
     
     end = begin.replace(hour=23, minute=59, second=59, microsecond=0)
 
