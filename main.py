@@ -23,7 +23,7 @@ def show_next_notification():
     
     content.config = config.Config()
 
-    content.time_bounds = time_checks.getTimeBounds(datetime.fromisoformat(content.config.last_time))
+    content.time_bounds = time_checks.getTimeBounds(max(now, datetime.fromisoformat(content.config.last_time)))
     
     n=0
 
