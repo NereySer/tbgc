@@ -42,7 +42,7 @@
 <div class="message-text whatsapp-text telegram-text">
 <p>(много других важных оповещений)</p>
 <div class="telegram-meassage-time-status">
-<span>{{ content.time.strftime('%H:%M') }}</span>
+<span>0:00</span>
 </div>
 </div>
 <div class="telegram-received-carat">
@@ -59,40 +59,66 @@
 <div class="clearfix"></div>
 </div>
 
-<div>
-<span style="
-    margin: 20px auto 10px auto;
-    display: table;
-    padding: 0px 10px 0px 10px;
-    background:rgba(128, 128, 128, 0.5);
-    border-radius: 15px;
-    font-weight: 600;
-">
-<p style="color:white; margin: 0;">{{ content.time.strftime('%d %B') }}</p>
-</span>
-</div>
+{% if content.notification %}
+    <div>
+    <span style="
+        margin: 20px auto 10px auto;
+        display: table;
+        padding: 0px 10px 0px 10px;
+        background:rgba(128, 128, 128, 0.5);
+        border-radius: 15px;
+        font-weight: 600;
+    ">
+    <p style="color:white; margin: 0;">{{ content.time.strftime('%d %B') }}</p>
+    </span>
+    </div>
 
-<div class="message message-received is-not remove">
-<div class="message-container u-table whatsapp-received telegram-received">
-<div class="message-message u-tableCell u-alignBottom">
-<div class="message-bubble Caret Caret-right whatsapp-caret">
-<div class="message-text whatsapp-text telegram-text">
-<p>{{ content.notification  }}</p>
-<div class="telegram-meassage-time-status">
-<span>{{ content.time.strftime('%H:%M') }}</span>
-</div>
-</div>
-<div class="telegram-received-carat"><img alt="image" src="images/anroid-telegram-left-carat.png"></div>
+    <div class="message message-received is-not remove">
+    <div class="message-container u-table whatsapp-received telegram-received">
+    <div class="message-message u-tableCell u-alignBottom">
+    <div class="message-bubble Caret Caret-right whatsapp-caret">
+    <div class="message-text whatsapp-text telegram-text">
+    <p>{{ content.notification  }}</p>
+    <div class="telegram-meassage-time-status">
+    <span>{{ content.time.strftime('%H:%M') }}</span>
+    </div>
+    </div>
+    <div class="telegram-received-carat"><img alt="image" src="images/anroid-telegram-left-carat.png"></div>
 
-</div>
-</div>
-</div>
-<div class="message-footer">
-<span class="message-footerItem">
-</span>
-</div>
-<div class="clearfix"></div>
-</div>
+    </div>
+    </div>
+    </div>
+    <div class="message-footer">
+    <span class="message-footerItem">
+    </span>
+    </div>
+    <div class="clearfix"></div>
+    </div>
+{% else %}
+    <div class="message message-received is-not remove">
+    <div class="message-container u-table telegram-received">
+    <div class="message-message u-tableCell u-alignBottom">
+    <div class="message-bubble Caret Caret-right whatsapp-caret">
+    <div class="message-text whatsapp-text telegram-text">
+    <p>(а новых в течение ближайшей недели не обнаружено)</p>
+    <div class="telegram-meassage-time-status">
+    <span>0:00</span>
+    </div>
+    </div>
+    <div class="telegram-received-carat">
+    <img alt="image" src="images/anroid-telegram-left-carat.png">
+    </div>
+
+    </div>
+    </div>
+    </div>
+    <div class="message-footer">
+    <span class="message-footerItem">
+    </span>
+    </div>
+    <div class="clearfix"></div>
+    </div>
+{% endif %}
 
 </div>
 </div>
