@@ -111,8 +111,8 @@ def popWholeDayEventsSummaries(events):
 
     return popEvents
 
-def telegram(events, diff, notification_date) -> str:
-    events = events.copy()
+def telegram(content) -> str:
+    events = content.events.copy()
 
     total_summary = popWholeDayEventsSummaries(events)
 
@@ -125,7 +125,13 @@ def telegram(events, diff, notification_date) -> str:
 
     template = initTemplate('telegram_message')
     
-    return template.render(total_summary=total_summary, events=events, diff=timedelta(days=diff), datetime=datetime, notification_date=notification_date)
+    return template.render(
+        total_summary=total_summary,
+        events=events,
+        diff=content.last_event.date()-content.now.date(),
+        datetime=datetime,
+        now=content.now
+    )
 
 def notifications(content):
     template = initTemplate('notification_template.html')
