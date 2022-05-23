@@ -5,12 +5,10 @@
 {%- elif diff.days == 1 -%}
   Завтра
 {%- else -%}
-  {{ (datetime.now() + diff).strftime('%d.%m') }}
+  {{ (datetime.now(DEFAULT_TIMEZONE) + diff).strftime('%d.%m') }}
 {%- endif -%}
 
-, {{ day_name((datetime.now() + diff).isoweekday()) }}
-{{ datetime.now() }}
-{{ (datetime.now() + diff) }}
+, {{ day_name((datetime.now(DEFAULT_TIMEZONE) + diff).isoweekday()) }}
 
 {%- if total_summary != '' -%}
   , {{ total_summary }}
