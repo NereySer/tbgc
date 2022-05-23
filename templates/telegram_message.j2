@@ -9,6 +9,8 @@
 {%- endif -%}
 
 , {{ day_name((datetime.now() + diff).isoweekday()) }}
+{{ datetime.now() }}
+{{ (datetime.now() + diff) }}
 
 {%- if total_summary != '' -%}
   , {{ total_summary }}
