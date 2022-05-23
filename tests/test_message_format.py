@@ -94,4 +94,4 @@ def test_work(monkeypatch, events, diff, expected):
 
     monkeypatch.setattr(message_format, 'datetime', mock_datetime)
 
-    assert message_format.telegram(events, diff) == expected
+    assert message_format.telegram(events, diff, base_date) == expected

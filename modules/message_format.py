@@ -1,6 +1,5 @@
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime, timedelta
-from modules.time_checks import DEFAULT_TIMEZONE
 import re
 
 templates = {}
@@ -112,7 +111,7 @@ def popWholeDayEventsSummaries(events):
 
     return popEvents
 
-def telegram(events, diff) -> str:
+def telegram(events, diff, notification_date) -> str:
     events = events.copy()
 
     total_summary = popWholeDayEventsSummaries(events)
@@ -126,7 +125,7 @@ def telegram(events, diff) -> str:
 
     template = initTemplate('telegram_message')
     
-    return template.render(total_summary=total_summary, events=events, diff=timedelta(days=diff), datetime=datetime, DEFAULT_TIMEZONE=DEFAULT_TIMEZONE)
+    return template.render(total_summary=total_summary, events=events, diff=timedelta(days=diff), datetime=datetime, notification_date=notification_date)
 
 def notifications(content):
     template = initTemplate('notification_template.html')

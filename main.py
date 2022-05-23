@@ -47,7 +47,7 @@ def show_next_notification():
         if type(events_date) is not date:
             events_date = events_date.date()
         
-        content.notification = message_format.telegram(events, (events_date-content.time.date()).days)
+        content.notification = message_format.telegram(events, (events_date-content.time.date()).days, content.time)
         
     return message_format.notifications(content)
 
@@ -87,7 +87,10 @@ def check_events():
     content.should_remind = content.isTime and datetime.fromisoformat(content.config.last_time) < content.last_event
     
     if content.should_remind:
-        bot.send_message( os.getenv('TELEGRAM_CHANNEL_ID'), message_format.telegram(content.events, (content.last_event.date()-content.now.date()).days))
+        bot.send_message(
+            os.getenv('TELEGRAM_CHANNEL_ID'),
+            message_format.telegram(content.events, (content.last_event.date()-content.now.date()).days, datetime.now(time_checks.DEFAULT_TIMEZONE))
+        )
         
         content.config.last_time = str(content.last_event)
     
