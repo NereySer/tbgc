@@ -1,5 +1,6 @@
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime, timedelta
+from modules.time_checks import DEFAULT_TIMEZONE
 import re
 
 templates = {}
@@ -125,7 +126,7 @@ def telegram(events, diff) -> str:
 
     template = initTemplate('telegram_message')
     
-    return template.render(total_summary=total_summary, events=events, diff=timedelta(days=diff), datetime=datetime)
+    return template.render(total_summary=total_summary, events=events, diff=timedelta(days=diff), datetime=datetime, DEFAULT_TIMEZONE=DEFAULT_TIMEZONE)
 
 def notifications(content):
     template = initTemplate('notification_template.html')
