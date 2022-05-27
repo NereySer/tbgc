@@ -1,4 +1,4 @@
-from datetime import datetime, timezone, timedelta, date, time
+from datetime import datetime, timezone, timedelta
 from copy import copy
 
 DEFAULT_TIMEZONE = timezone(timedelta(hours=+3))
@@ -46,7 +46,7 @@ def isItTimeToRemind(events, date = None):
 
     events.timed = withoutOldEvents(events.timed, now)
     if not events:
-        return (False, now)
+        return (False, events)
 
     first_event_datetime = checkEvents(events)
 
@@ -93,10 +93,12 @@ def setDateToBeginOfDay(date):
     return date.replace(hour=0, minute=0, second=0, microsecond=0)
 
 def getTimeBounds(start = None):
+    now = datetime.now(DEFAULT_TIMEZONE)
+
     if start is None:
-        begin = datetime.now(DEFAULT_TIMEZONE)
+        begin = now
     else:
-        begin = start
+        begin = max(now, start)
 
     if begin.hour > LATE_HOUR:
         #Too late to remind about today's events, so let's look for tomorrow

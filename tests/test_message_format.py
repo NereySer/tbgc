@@ -83,27 +83,12 @@ def generate_event(hour, text, transparent = False):
         generate_event(-1, 'test2'),
     ], 0, 'Сегодня, вторник\ntest\ntest2'),
 ])
-def test_work(monkeypatch, events, diff, expected):
+def test_work(events, diff, expected):
     base_date=datetime.fromisoformat("2022-05-03T00:00:00+03:00")
 
     content = Content()
 
     content.events = Events(events, base_date + timedelta(days=diff))
     content.now = base_date
-
-    class mock_datetime:
-        @classmethod
-        def now(self, tz=None):
-            return ( base_date.astimezone(tz) )
-
-        @classmethod
-        def utcnow(self):
-            return ( self.now(timezone.utc) )
-
-        @classmethod
-        def fromisoformat(self, val):
-            return datetime.fromisoformat(val)
-
-    monkeypatch.setattr(message_format, 'datetime', mock_datetime)
 
     assert message_format.telegram(content) == expected
