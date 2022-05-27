@@ -72,7 +72,7 @@ def whenHourToRemind(events, date) -> datetime:
     return notification_time
 
 def whenTimeToRemind(events) -> datetime:
-    if not events.total and not events.timed:
+    if not events:
         raise Exception("No events provided")
 
     notification_time = None

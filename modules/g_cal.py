@@ -14,7 +14,7 @@ calendarId = os.getenv('GOOGLE_CALENDAR_ID')
 SERVICE_ACCOUNT_FILE = 'key/civil-hash.json'
 
 class Events:
-    def __init__(self, total, timed, date):
+    def __init__(self, total = [], timed = [], date = datetime.now()):
         self.total = total
         self.timed = timed
         self.date = date
