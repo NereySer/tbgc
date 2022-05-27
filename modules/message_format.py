@@ -1,5 +1,6 @@
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime, timedelta
+from copy import deepcopy as copy
 import re
 
 templates = {}
@@ -101,29 +102,26 @@ def splitCommonSummary(events):
     return (common_summary.strip(), retEvents)
 
 def telegram(content) -> str:
-    total_summaries = content.events[0].copy()
-    events = content.events[1].copy()
+    events = copy(content.events)
 
-    events_summary, events = splitCommonSummary(events)
+    events_summary, events.timed = splitCommonSummary(events.timed)
 
     if events_summary != '':
-        total_summaries.append(events_summary)
+        events.total.append(events_summary)
 
     template = initTemplate('telegram_message')
-    
+
     return template.render(
-        total_summaries = total_summaries,
         events = events,
-        events_time = content.time_bounds[0],
         send_time = content.now
     )
 
 def notifications(content):
     template = initTemplate('notification_template.html')
-    
+
     return template.render(content=content)
 
 def raise_notification(content, html:bool=True):
     template = initTemplate('raise.html' if html else 'raise')
-    
+
     return template.render(content=content)

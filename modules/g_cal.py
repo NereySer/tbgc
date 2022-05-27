@@ -14,9 +14,9 @@ calendarId = os.getenv('GOOGLE_CALENDAR_ID')
 SERVICE_ACCOUNT_FILE = 'key/civil-hash.json'
 
 class Events:
-    def __init__(self, total = [], timed = [], date = datetime.now()):
-        self.total = total
-        self.timed = timed
+    def __init__(self, events = [], date = datetime.now()):
+        self.total, self.timed = eventsSplitFormat(events)
+
         self.date = date
 
     def __eq__(self, other):
@@ -68,4 +68,4 @@ def get_incomig_events(begin: datetime, end: datetime):
                                             singleEvents=True,
                                             orderBy='startTime').execute()
 
-    return Events(*eventsSplitFormat(events_result.get('items', [])), begin)
+    return Events(events_result.get('items', []), begin)

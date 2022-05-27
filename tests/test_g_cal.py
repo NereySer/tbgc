@@ -5,7 +5,9 @@ import pytest
 
 from modules import g_cal
 
-def google_event(hour, days_add = 0, text = '', duration = 1, transparent = False, base_date = None):
+def stored_event(hour, days_add = 0, text = '', duration = 1, transparent = False, base_date = None):
+    assert hour >= 0
+
     if base_date is None:
         base_date = datetime.now(DEFAULT_TIMEZONE)
 
@@ -14,26 +16,10 @@ def google_event(hour, days_add = 0, text = '', duration = 1, transparent = Fals
         'transparency': ('transparent' if transparent else 'opaque')
     }
 
-    if hour == -1:
-        start_time = base_date.date() + timedelta(days = days_add)
+    start_time = base_date.replace(hour=hour) + timedelta(days = days_add)
 
-        delta_duration = timedelta(days = duration)
-
-        key_name = 'date'
-    else:
-        start_time = base_date.replace(hour=hour) + timedelta(days = days_add)
-
-        delta_duration = timedelta(hours = duration)
-
-        key_name = 'dateTime'
-
-    retVal['start'] = {
-            key_name: start_time.isoformat()
-    }
-
-    retVal['end'] = {
-            key_name: (start_time + delta_duration).isoformat()
-    }
+    retVal['start'] = start_time
+    retVal['end'] = (start_time + timedelta(hours = duration))
 
     return retVal
 
@@ -56,11 +42,11 @@ base_date = datetime.now(DEFAULT_TIMEZONE)
         ([], [])
     ),
     (
-        [google_event(10, text='test', base_date = base_date)],
-        ([], [g_cal_event(10, text='test', base_date = base_date)])
+        [g_cal_event(10, text='test', base_date = base_date)],
+        ([], [stored_event(10, text='test', base_date = base_date)])
     ),
     (
-        [google_event(-1, text='test')],
+        [g_cal_event(-1, text='test')],
         (['test'], [])
     ),
 ])
