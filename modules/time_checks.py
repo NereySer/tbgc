@@ -25,19 +25,11 @@ def checkEvents(events):
         else:
             return events.date.replace(hour = LATE_HOUR, minute = 0, second = 0, microsecond = 0)
 
-    first_event_datetime = None
-
     for event in events.timed:
         if event['start'].date() != events.date.date():
             raise Exception("Events in different days are not allowed")
 
-        if first_event_datetime is None:
-            first_event_datetime = event['start']
-        else:
-            first_event_datetime = min(event['start'], first_event_datetime)
-
-
-    return first_event_datetime
+    return min(events.timed, key = lambda event:event['start'])['start']
 
 def isTodayTimeToRemind(first_event_datetime, now):
     #Today morning reminder OR daytime reminder
@@ -53,7 +45,7 @@ def isItTimeToRemind(events, date = None):
     now = datetime.now(DEFAULT_TIMEZONE) if date is None else date
 
     events.timed = withoutOldEvents(events.timed, now)
-    if not events.total and not events.timed:
+    if not events:
         return (False, now)
 
     first_event_datetime = checkEvents(events)

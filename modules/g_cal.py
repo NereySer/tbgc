@@ -27,6 +27,9 @@ class Events:
     def __repr__(self):
         return 'Events(' + str(self.total) + ', ' + str(self.timed) + ', ' + str(self.date) + ')'
 
+    def __bool__(self):
+        return bool(self.total) or bool(self.timed)
+
 def getGService():
     global g_service
     
