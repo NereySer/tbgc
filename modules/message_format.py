@@ -100,37 +100,22 @@ def splitCommonSummary(events):
 
     return (common_summary.strip(), retEvents)
 
-def popWholeDayEventsSummaries(events):
-    popEvents = []
-
-    for event in events.copy():
-        if 'date' in event['start']:
-            popEvents.append(event['summary'])
-
-            events.remove(event)
-
-    return popEvents
-
 def telegram(content) -> str:
-    events = content.events.copy()
-
-    total_summary = popWholeDayEventsSummaries(events)
+    total_summaries = content.events[0].copy()
+    events = content.events[1].copy()
 
     events_summary, events = splitCommonSummary(events)
 
     if events_summary != '':
-        total_summary.append(events_summary)
-
-    total_summary = ', '.join(total_summary)
+        total_summaries.append(events_summary)
 
     template = initTemplate('telegram_message')
     
     return template.render(
-        total_summary=total_summary,
-        events=events,
-        diff=content.last_event.date()-content.now.date(),
-        datetime=datetime,
-        now=content.now
+        total_summaries = total_summaries,
+        events = events,
+        events_time = content.time_bounds[0],
+        send_time = content.now
     )
 
 def notifications(content):

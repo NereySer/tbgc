@@ -35,49 +35,45 @@ def test_notifications():
 
     assert response.status_code >= 200 and response.status_code <= 299
 
-@pytest.mark.parametrize("events", [
+@pytest.mark.parametrize("total_summaries, events", [
     # Test no events
-    ([]),
+    ([], []),
     # Test single events
-    ([
+    ([], [
         g_cal_event(10, text = 'text'),
     ]),
-    ([
+    ([], [
         g_cal_event(13, text = 'text'),
     ]),
-    ([
+    ([], [
         g_cal_event(19, text = 'text'),
     ]),
-    ([
+    ([], [
         g_cal_event(10, days_add = 1, text = 'text'),
     ]),
-    ([
+    ([], [
         g_cal_event(13, days_add = 1, text = 'text'),
     ]),
-    ([
+    ([], [
         g_cal_event(21, days_add = 1, text = 'text'),
     ]),
-    ([
-        g_cal_event(-1, text = 'text'),
-    ]),
+    (['text'], []),
     #Test multiple events
-    ([
+    ([], [
         g_cal_event(10, text = 'text'),
         g_cal_event(13, text = 'text'),
         g_cal_event(21, text = 'text'),
     ]),
-    ([
-        g_cal_event(-1, text = 'text'),
+    (['text'], [
         g_cal_event(13, text = 'text'),
         g_cal_event(21, text = 'text')
     ]),
-    ([
+    (['text'], [
         g_cal_event(10, text = 'text'),
-        g_cal_event(-1, text = 'text'),
         g_cal_event(21, text = 'text'),
     ]),
 ])
-def test_mock_events(monkeypatch, events):
+def test_mock_events(monkeypatch, total_summaries, events):
     def mock_g_cal_get_incomig_events(begin, end):
         return events
 

@@ -1,17 +1,24 @@
-{% from 'macroses.j2' import day_name, start_time, end_time %}
+{% from 'macroses.j2' import day_name, start_time, end_time, diff %}
 
-{%- if diff.days == 0 -%}
+{%- if diff(send_time, events_time) == '0' -%}
   Сегодня 
-{%- elif diff.days == 1 -%}
+{%- elif diff(send_time, events_time) == '1' -%}
   Завтра
 {%- else -%}
-  {{ (now + diff).strftime('%d.%m') }}
+  {{ events_time.strftime('%d.%m') }}
 {%- endif -%}
 
-, {{ day_name((now + diff).isoweekday()) }}
+, {{ day_name(events_time.isoweekday()) }}
 
-{%- if total_summary != '' -%}
-  , {{ total_summary }}
+{%- if total_summaries != [] -%}
+  {%- if total_summaries | length == 1 -%}
+    , {{ total_summaries[0] }}
+  {%- else -%}
+    {% for total_summary in total_summaries +%}
+      {# newline #}
+      {{- total_summary -}}
+    {% endfor %}
+  {%- endif -%}
 {%- endif -%}
 
 {% if events %}
@@ -32,7 +39,7 @@
       {% if event['transparency'] == 'transparent' -%} 
         {% set list.simple = False -%}
 
-        с {{ start_time(event, datetime) }} до {{ end_time(event, datetime) }}
+        с {{ start_time(event) }} до {{ end_time(event) }}
       {%- else -%}
         {% if not list.simple -%}
           в {# space #}
@@ -40,20 +47,20 @@
           {%- set list.simple = True -%}
         {% endif -%}
 
-        {{ start_time(event, datetime) }} 
+        {{ start_time(event) }} 
       {%- endif %}
     {%- endfor %}
   {%- else %}
     {% for event in events +%}
       {# newline #}
-      {{- start_time(event, datetime) }}
+      {{- start_time(event) }}
 
       {%- if event['transparency'] == 'transparent' -%} 
-        -{{ end_time(event, datetime) }}
+        -{{ end_time(event) }}
       {%- endif -%} 
       {# space #} - {{ event['summary'] -}}
     {% endfor %}
   {% endif %}
-{% elif total_summary == '' %}
+{% elif total_summary == [] %}
   Ничего не будет.
 {% endif %}
