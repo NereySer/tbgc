@@ -111,7 +111,7 @@ def updateJob(target_job, jobs):
 
     return False
 
-def main()
+def main():
     parser = createParser()
     options = parser.parse_args()
     job_info_create = createJobDetails()
