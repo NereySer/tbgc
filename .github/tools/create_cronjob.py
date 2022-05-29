@@ -87,6 +87,14 @@ def createJob(jobInfo):
 
     return response.json()['jobId']
 
+def removeDuplicatedJobs(jobs):
+    while len(jobs) > 1:
+        job = filtered_jobs.pop()
+
+        deleteJob(job['jobId'])
+
+        print('Successfully deleted job {}'.format(job['jobId']))
+
 def main()
     parser = createParser()
     options = parser.parse_args()
@@ -97,20 +105,12 @@ def main()
     filtered_jobs = list(filter(lambda job: job['title'] == options.title, result['jobs']))
 
     if filtered_jobs:
-        while len(filtered_jobs) > 1:
-            job = filtered_jobs.pop()
-
-            deleteJob(job['jobId'])
-
-            print('Successfully deleted job {}'.format(job['jobId']))
+        removeDuplicatedJobs(filtered_jobs)
 
         job_info = getJobInfo(filtered_jobs[0]['jobId'])
 
         job_info['jobDetails'] = {
-            key: value for key, value in job_info['jobDetails'].items() if \
-            not key.startswith('last') and
-            not key.startswith('next') and
-            key != 'jobId'
+            key: value for key, value in job_info['jobDetails'].items() if key in job_info_create['job']
         }
 
         if job_info_create['job'] == job_info['jobDetails']:
