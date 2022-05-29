@@ -1,6 +1,6 @@
 import json
 import requests
-import os
+import os, sys
 from argparse import ArgumentParser
 
 ENDPOINT = 'https://api.cron-job.org'
@@ -25,7 +25,7 @@ def getLink(jobId = None):
         return '{}/jobs/{}'.format(ENDPOINT, jobId)
 
 def createJobDetails(options):
-    with open("cronjob.json", "r") as json_file:
+    with open(os.path.join(sys.path[0], "cronjob.json"), "r") as json_file:
         job = json.load(json_file)
 
         job['job']['title'] = options.title
