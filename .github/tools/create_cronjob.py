@@ -24,7 +24,7 @@ def getLink(jobId = None):
     else:
         return '{}/jobs/{}'.format(ENDPOINT, jobId)
 
-def createJobDetails():
+def createJobDetails(options):
     return {
         "job": {
             'enabled': True,
@@ -62,7 +62,12 @@ def createJobDetails():
     }
 
 def getJobs():
-    return requests.get(getLink(), headers=headers).json()
+    response = requests.get(getLink(), headers=headers)
+
+    if response.status_code < 200 or response.status_code >= 300:
+        raise Exception('Error {} while listing jobs'.format(response.status_code))
+
+    return response.json()['jobs']
 
 def deleteJob(jobId):
     response = requests.delete(getLink(jobId), headers=headers)
@@ -71,7 +76,12 @@ def deleteJob(jobId):
         raise Exception('Error {} while deleting {}'.format(response.status_code, job['jobId']))
 
 def getJobInfo(jobId):
-    return requests.get(getLink(jobId), headers=headers).json()
+    response = requests.get(getLink(jobId), headers=headers)
+
+    if response.status_code < 200 or response.status_code >= 300:
+        raise Exception('Error {} while gettinj job {} info'.format(response.status_code, jobId))
+
+    return response.json()
 
 def updateJob(jobId, jobInfo):
     response = requests.patch(getLink(jobId), headers=headers, data=json.dumps(jobInfo))
@@ -105,7 +115,7 @@ def updateJob(target_job, jobs):
     }
 
     if target_job['job'] == job_info['jobDetails']:
-        updateJob(filtered_jobs[0]['jobId'], job_info_create)
+        updateJob(jobs[0]['jobId'], target_job)
 
         return True
 
@@ -114,11 +124,9 @@ def updateJob(target_job, jobs):
 def main():
     parser = createParser()
     options = parser.parse_args()
-    job_info_create = createJobDetails()
+    job_info_create = createJobDetails(options)
 
-    result = getJobs()
-
-    filtered_jobs = list(filter(lambda job: job['title'] == options.title, result['jobs']))
+    filtered_jobs = list(filter(lambda job: job['title'] == options.title, getJobs()))
 
     if not filtered_jobs:
         jobId = createJob(job_info_create)
