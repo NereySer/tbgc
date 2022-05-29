@@ -3,6 +3,12 @@ import requests
 import os
 from argparse import ArgumentParser
 
+ENDPOINT = 'https://api.cron-job.org'
+headers = {
+    'Authorization': 'Bearer ' + os.getenv('CRONJOB_API_KEY'),
+    'Content-Type': 'application/json'
+}
+
 def createParser ():
     parser = ArgumentParser()
 
@@ -11,8 +17,6 @@ def createParser ():
     parser.add_argument('--hours', required=True, type=int, nargs='+')
 
     return parser
-
-ENDPOINT = 'https://api.cron-job.org'
 
 def getLink(jobId = None):
     if jobId is None:
@@ -57,11 +61,6 @@ def createJobDetails():
         }
     }
 
-headers = {
-    'Authorization': 'Bearer ' + os.getenv('CRONJOB_API_KEY'),
-    'Content-Type': 'application/json'
-}
-
 def getJobs():
     return requests.get(getLink(), headers=headers).json()
 
@@ -88,40 +87,44 @@ def createJob(jobInfo):
 
     return response.json()['jobId']
 
-parser = createParser()
-options = parser.parse_args()
-job_info_create = createJobDetails()
+def main()
+    parser = createParser()
+    options = parser.parse_args()
+    job_info_create = createJobDetails()
 
-result = getJobs()
+    result = getJobs()
 
-filtered_jobs = list(filter(lambda job: job['title'] == options.title, result['jobs']))
+    filtered_jobs = list(filter(lambda job: job['title'] == options.title, result['jobs']))
 
-if filtered_jobs:
-    while len(filtered_jobs) > 1:
-        job = filtered_jobs.pop()
+    if filtered_jobs:
+        while len(filtered_jobs) > 1:
+            job = filtered_jobs.pop()
 
-        deleteJob(job['jobId'])
+            deleteJob(job['jobId'])
 
-        print('Successfully deleted job {}'.format(job['jobId']))
+            print('Successfully deleted job {}'.format(job['jobId']))
 
-    job_info = getJobInfo(filtered_jobs[0]['jobId'])
+        job_info = getJobInfo(filtered_jobs[0]['jobId'])
 
-    job_info['jobDetails'] = {
-        key: value for key, value in job_info['jobDetails'].items() if \
-        not key.startswith('last') and
-        not key.startswith('next') and
-        key != 'jobId'
-    }
+        job_info['jobDetails'] = {
+            key: value for key, value in job_info['jobDetails'].items() if \
+            not key.startswith('last') and
+            not key.startswith('next') and
+            key != 'jobId'
+        }
 
-    if job_info_create['job'] == job_info['jobDetails']:
-        print('Job {} is already present'.format(filtered_jobs[0]['jobId']))
+        if job_info_create['job'] == job_info['jobDetails']:
+            print('Job {} is already present'.format(filtered_jobs[0]['jobId']))
 
-        exit()
+            exit()
 
-    updateJob(filtered_jobs[0]['jobId'], job_info_create)
+        updateJob(filtered_jobs[0]['jobId'], job_info_create)
 
-    print('Successfully patched job {}'.format(filtered_jobs[0]['jobId']))
-else:
-    jobId = createJob(job_info_create)
+        print('Successfully patched job {}'.format(filtered_jobs[0]['jobId']))
+    else:
+        jobId = createJob(job_info_create)
 
-    print('Successfully created job {}'.format(jobId))
+        print('Successfully created job {}'.format(jobId))
+
+if __name__ == "__main__":
+    main()
