@@ -95,6 +95,22 @@ def removeDuplicatedJobs(jobs):
 
         print('Successfully deleted job {}'.format(job['jobId']))
 
+def updateJob(target_job, jobs):
+    removeDuplicatedJobs(jobs)
+
+    job_info = getJobInfo(jobs[0]['jobId'])
+
+    job_info['jobDetails'] = {
+        key: value for key, value in job_info['jobDetails'].items() if key in target_job['job']
+    }
+
+    if target_job['job'] == job_info['jobDetails']:
+        updateJob(filtered_jobs[0]['jobId'], job_info_create)
+
+        return True
+
+    return False
+
 def main()
     parser = createParser()
     options = parser.parse_args()
@@ -104,27 +120,14 @@ def main()
 
     filtered_jobs = list(filter(lambda job: job['title'] == options.title, result['jobs']))
 
-    if filtered_jobs:
-        removeDuplicatedJobs(filtered_jobs)
-
-        job_info = getJobInfo(filtered_jobs[0]['jobId'])
-
-        job_info['jobDetails'] = {
-            key: value for key, value in job_info['jobDetails'].items() if key in job_info_create['job']
-        }
-
-        if job_info_create['job'] == job_info['jobDetails']:
-            print('Job {} is already present'.format(filtered_jobs[0]['jobId']))
-
-            exit()
-
-        updateJob(filtered_jobs[0]['jobId'], job_info_create)
-
-        print('Successfully patched job {}'.format(filtered_jobs[0]['jobId']))
-    else:
+    if not filtered_jobs:
         jobId = createJob(job_info_create)
 
         print('Successfully created job {}'.format(jobId))
+    elif updateJob(job_info_create, filtered_jobs):
+        print('Successfully patched job {}'.format(filtered_jobs[0]['jobId']))
+    else:
+        print('Job {} is already present'.format(filtered_jobs[0]['jobId']))
 
 if __name__ == "__main__":
     main()
