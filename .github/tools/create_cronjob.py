@@ -25,41 +25,14 @@ def getLink(jobId = None):
         return '{}/jobs/{}'.format(ENDPOINT, jobId)
 
 def createJobDetails(options):
-    return {
-        "job": {
-            'enabled': True,
-            'title': options.title,
-            'saveResponses': True,
-            'url': options.url,
-            'auth': {
-                'enable': False,
-                'user': '',
-                'password': ''
-            },
-            'notification': {
-                'onFailure': True,
-                'onSuccess': True,
-                'onDisable': True
-            },
-            'extendedData': {
-                'headers': [],
-                'body': ''
-            },
-            'type': 0,
-            'requestTimeout': 30,
-            'redirectSuccess': False,
-            'schedule': {
-                'timezone': 'Europe/Moscow',
-                'hours': options.hours,
-                'mdays': [-1],
-                'minutes': [0],
-                'months': [-1],
-                'wdays': [-1]
-            },
+    with open("cronjob.json", "r") as json_file:
+        job = json.load(json_file)
 
-            'requestMethod': 0
-        }
-    }
+        job['job']['title'] = options.title
+        job['job']['url'] = options.url,
+        job['job']['schedule']['hours'] = options.hours,
+
+    return job
 
 def getJobs():
     response = requests.get(getLink(), headers=headers)
