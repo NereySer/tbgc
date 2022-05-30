@@ -188,10 +188,10 @@ jobs:
   cronjob:
     name: Create cronjob
     
-    #if: github.ref == 'refs/heads/main' || 
-    #    github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/main' || 
+        github.ref == 'refs/heads/develop'
     
-    #needs: [deploy]
+    needs: [deploy]
 
     environment: ${{ github.ref == 'refs/heads/main' && 'main' || 'develop' }}
     
