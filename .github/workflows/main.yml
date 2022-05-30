@@ -206,7 +206,7 @@ jobs:
         python -m pip install --upgrade pip
         pip3 install -r .github/tools/requirements.txt
     - name: Create cronjob
-      run: python3 .github/tools/create_cronjob.py --title $TITLE --url $APP_URL --hours 9 12 21
+      run: python3 .github/tools/create_cronjob.py --title "$TITLE" --url $APP_URL --hours 9 12 21
       env: 
         APP_URL: https://${{secrets.HEROKU_APP}}.herokuapp.com/check_events?key=${{secrets.CHECK_KEY}}
         TITLE: Heroku app ${{secrets.HEROKU_APP}} job from github
