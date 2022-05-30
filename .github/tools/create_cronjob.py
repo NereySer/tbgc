@@ -29,8 +29,8 @@ def createJobDetails(options):
         job = json.load(json_file)
 
         job['job']['title'] = options.title
-        job['job']['url'] = options.url,
-        job['job']['schedule']['hours'] = options.hours,
+        job['job']['url'] = options.url
+        job['job']['schedule']['hours'] = options.hours
 
     return job
 
@@ -72,13 +72,13 @@ def createJob(jobInfo):
 
 def removeDuplicatedJobs(jobs):
     while len(jobs) > 1:
-        job = filtered_jobs.pop()
+        job = jobs.pop()
 
         deleteJob(job['jobId'])
 
         print('Successfully deleted job {}'.format(job['jobId']))
 
-def updateJob(target_job, jobs):
+def correctJob(target_job, jobs):
     removeDuplicatedJobs(jobs)
 
     job_info = getJobInfo(jobs[0]['jobId'])
@@ -87,7 +87,7 @@ def updateJob(target_job, jobs):
         key: value for key, value in job_info['jobDetails'].items() if key in target_job['job']
     }
 
-    if target_job['job'] == job_info['jobDetails']:
+    if target_job['job'] != job_info['jobDetails']:
         updateJob(jobs[0]['jobId'], target_job)
 
         return True
@@ -105,7 +105,7 @@ def main():
         jobId = createJob(job_info_create)
 
         print('Successfully created job {}'.format(jobId))
-    elif updateJob(job_info_create, filtered_jobs):
+    elif correctJob(job_info_create, filtered_jobs):
         print('Successfully patched job {}'.format(filtered_jobs[0]['jobId']))
     else:
         print('Job {} is already present'.format(filtered_jobs[0]['jobId']))
