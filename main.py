@@ -34,7 +34,7 @@ def getNextEvents(now, begin_time):
     return events_col
 
 @app.route("/")
-def show_next_notification():
+def show_next_notifications():
     content = Content()
 
     content.now = datetime.now(time_checks.DEFAULT_TIMEZONE)
