@@ -9,4 +9,4 @@ COPY . ./
 RUN pip3 install -r requirements.txt && \
     pip3 install gunicorn
 
-CMD gunicorn -b 0.0.0.0:$PORT main:app
+CMD gunicorn -b 0.0.0.0:$PORT api.main:app
