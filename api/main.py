@@ -39,7 +39,7 @@ def show_next_notifications():
 
     content.now = datetime.now(time_checks.DEFAULT_TIMEZONE)
 
-    content.config = config.Config()
+    content.config = config_selector.Config()
 
     events_col = getNextEvents(content.now, datetime.fromisoformat(content.config.last_time))
 
@@ -81,7 +81,7 @@ def check_events():
 
     content.time = datetime.now(time_checks.DEFAULT_TIMEZONE)
 
-    content.config = config.Config()
+    content.config = config_selector.Config()
 
     content.time_bounds = time_checks.getTimeBounds(datetime.fromisoformat(content.config.last_time))
 

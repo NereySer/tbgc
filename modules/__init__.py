@@ -3,5 +3,7 @@ from . import (
     time_checks,
     message_format,
     db,
-    config
+    config,
+    config_redis,
+    config_selector
 )

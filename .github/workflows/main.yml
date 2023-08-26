@@ -27,8 +27,6 @@ jobs:
           --health-retries 5    
       redis:
         image: redis
-        env:
-          POSTGRES_PASSWORD: postgres
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s
@@ -79,6 +77,16 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5    
+      redis:
+        image: redis
+        ports:
+          - 6379/tcp
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     env: 
       DOCKER_IMAGE_TAG: '${{ github.event.repository.name }}:${{ github.run_id }}'
       DOCKER_CONTAINER_NAME: '${{ github.event.repository.name }}_${{ github.run_id }}'
@@ -96,7 +104,7 @@ jobs:
         docker build . \
               --file Dockerfile \
               --tag ${DOCKER_IMAGE_TAG,,}
-    - name: Run the image
+    - name: Run the image - postgres
       run: |
         docker run \
               -d \
@@ -108,10 +116,10 @@ jobs:
               --env CHECK_KEY=$CHECK_KEY \
               --env DATABASE_URL=postgres://postgres:postgres@$(hostname -I | awk '{print $1}'):${{ job.services.postgres.ports[5432] }}/postgres \
               ${DOCKER_IMAGE_TAG,,}
-      env: 
+      env:
         TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
         TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_ID}}
-        GOOGLE_CALENDAR_ID: ${{secrets.GOOGLE_CALENDAR_ID}}      
+        GOOGLE_CALENDAR_ID: ${{secrets.GOOGLE_CALENDAR_ID}}
         CHECK_KEY: ${{secrets.CHECK_KEY}}
     - name: Prepare the Docker container
       run: |
@@ -126,7 +134,7 @@ jobs:
               ${DOCKER_CONTAINER_NAME,,} \
               bash -c 'curl -sL -o /dev/null -w "%{http_code}" http://localhost:5000/check_events?key=WRONG_KEY' \
         ); \
-        
+
         if [[ ${HTTP_CODE} -ne 404 ]] ; then
           echo Wrong HTTP code: $HTTP_CODE
           exit 22
@@ -137,7 +145,7 @@ jobs:
               ${DOCKER_CONTAINER_NAME,,} \
               bash -c 'curl -sL -o /dev/null -w "%{http_code}" http://localhost:5000/check_events?key=${CHECK_KEY}' \
         ); \
-        
+
         if [[ ${HTTP_CODE} -lt 200 || ${HTTP_CODE} -gt 299 ]] ; then
           echo HTTP code: $HTTP_CODE
           exit 22
@@ -148,11 +156,77 @@ jobs:
               ${DOCKER_CONTAINER_NAME,,} \
               bash -c 'curl -sL -o /dev/null -w "%{http_code}" http://localhost:5000/' \
         ); \
-        
+
         if [[ ${HTTP_CODE} -lt 200 || ${HTTP_CODE} -gt 299 ]] ; then
           echo HTTP code: $HTTP_CODE
           exit 22
         fi
+
+    - name: Clear postgress container
+      run: |
+        docker logs ${DOCKER_CONTAINER_NAME,,} || true
+        docker rm -f ${DOCKER_CONTAINER_NAME,,} || true
+
+    - name: Run the image - redis
+      run: |
+        docker run \
+              -d \
+              --name ${DOCKER_CONTAINER_NAME,,} \
+              --env PORT=5000 \
+              --env TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN \
+              --env TELEGRAM_CHANNEL_ID=$TELEGRAM_CHANNEL_ID \
+              --env GOOGLE_CALENDAR_ID=$GOOGLE_CALENDAR_ID \
+              --env CHECK_KEY=$CHECK_KEY \
+              --env KV_URL=redis://$(hostname -I | awk '{print $1}'):${{ job.services.redis.ports[6379] }} \
+              --env KV_REST_API_URL=http://redis \
+              --env DEPLOY=autotests \
+              ${DOCKER_IMAGE_TAG,,}
+      env:
+        TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
+        TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_ID}}
+        GOOGLE_CALENDAR_ID: ${{secrets.GOOGLE_CALENDAR_ID}}
+        CHECK_KEY: ${{secrets.CHECK_KEY}}
+    - name: Prepare the Docker container
+      run: |
+        docker exec \
+              ${DOCKER_CONTAINER_NAME,,} \
+              bash -c '\
+                apt-get update && \
+                apt-get install -y curl'
+    - name: Test denied access
+      run: |
+        HTTP_CODE=$(docker exec \
+              ${DOCKER_CONTAINER_NAME,,} \
+              bash -c 'curl -sL -o /dev/null -w "%{http_code}" http://localhost:5000/check_events?key=WRONG_KEY' \
+        ); \
+
+        if [[ ${HTTP_CODE} -ne 404 ]] ; then
+          echo Wrong HTTP code: $HTTP_CODE
+          exit 22
+        fi
+    - name: Test the Docker container
+      run: |
+        HTTP_CODE=$(docker exec \
+              ${DOCKER_CONTAINER_NAME,,} \
+              bash -c 'curl -sL -o /dev/null -w "%{http_code}" http://localhost:5000/check_events?key=${CHECK_KEY}' \
+        ); \
+
+        if [[ ${HTTP_CODE} -lt 200 || ${HTTP_CODE} -gt 299 ]] ; then
+          echo HTTP code: $HTTP_CODE
+          exit 22
+        fi
+    - name: Test next notification
+      run: |
+        HTTP_CODE=$(docker exec \
+              ${DOCKER_CONTAINER_NAME,,} \
+              bash -c 'curl -sL -o /dev/null -w "%{http_code}" http://localhost:5000/' \
+        ); \
+
+        if [[ ${HTTP_CODE} -lt 200 || ${HTTP_CODE} -gt 299 ]] ; then
+          echo HTTP code: $HTTP_CODE
+          exit 22
+        fi
+
     - name: Clear all
       if: always()
       run: |
