@@ -226,8 +226,10 @@ jobs:
   deploy:
     name: Deploy to Heroku
     
-    if: github.ref == 'refs/heads/main' || 
+    if: false && (
+        github.ref == 'refs/heads/main' ||
         github.ref == 'refs/heads/develop'
+      )
     
     needs: [unit_test, docker_test]
     
@@ -254,7 +256,7 @@ jobs:
   cronjob:
     name: Create cronjob
     
-    if: github.ref == 'refs/heads/main' || 
+    if: github.ref == 'refs/heads/main' ||
         github.ref == 'refs/heads/develop'
     
     needs: [deploy]
