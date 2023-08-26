@@ -226,7 +226,7 @@ jobs:
   deploy:
     name: Deploy to Heroku
     
-    if: never() && (
+    if: false && (
         github.ref == 'refs/heads/main' ||
         github.ref == 'refs/heads/develop'
       )
