@@ -39,12 +39,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip3 install -r requirements.txt
-    - name: Create Google API key
-      run: |
-        mkdir key
-        cat > key/civil-hash.json <<- END_OF_KEY
-        ${{secrets.GOOGLE_KEY}}
-        END_OF_KEY
     - name: Run tests
       run: python -m pytest -v
       env: 
@@ -55,10 +49,7 @@ jobs:
         KV_URL: redis://redis:6379
         KV_REST_API_URL: http://redis
         CHECK_KEY: ${{secrets.CHECK_KEY}}
-    - name: Clear all
-      if: always()
-      run: |
-        rm key/civil-hash.json || true
+        GOOGLE_KEY: ${{secrets.GOOGLE_KEY}}
 
   docker_test:
     name: Build an image and test it
@@ -93,12 +84,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Create Google API key
-      run: |
-        mkdir key
-        cat > key/civil-hash.json <<- END_OF_KEY
-        ${{secrets.GOOGLE_KEY}}
-        END_OF_KEY
     - name: Build the Docker image
       run: |
         docker build . \
@@ -114,6 +99,7 @@ jobs:
               --env TELEGRAM_CHANNEL_ID=$TELEGRAM_CHANNEL_ID \
               --env GOOGLE_CALENDAR_ID=$GOOGLE_CALENDAR_ID \
               --env CHECK_KEY=$CHECK_KEY \
+              --env GOOGLE_KEY=$GOOGLE_KEY \
               --env DATABASE_URL=postgres://postgres:postgres@$(hostname -I | awk '{print $1}'):${{ job.services.postgres.ports[5432] }}/postgres \
               ${DOCKER_IMAGE_TAG,,}
       env:
@@ -121,6 +107,7 @@ jobs:
         TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_ID}}
         GOOGLE_CALENDAR_ID: ${{secrets.GOOGLE_CALENDAR_ID}}
         CHECK_KEY: ${{secrets.CHECK_KEY}}
+        GOOGLE_KEY: ${{secrets.GOOGLE_KEY}}
     - name: Prepare the Docker container
       run: |
         docker exec \
@@ -177,6 +164,7 @@ jobs:
               --env TELEGRAM_CHANNEL_ID=$TELEGRAM_CHANNEL_ID \
               --env GOOGLE_CALENDAR_ID=$GOOGLE_CALENDAR_ID \
               --env CHECK_KEY=$CHECK_KEY \
+              --env GOOGLE_KEY=$GOOGLE_KEY \
               --env KV_URL=redis://$(hostname -I | awk '{print $1}'):${{ job.services.redis.ports[6379] }} \
               --env KV_REST_API_URL=http://redis \
               --env DEPLOY=autotests \
@@ -186,6 +174,7 @@ jobs:
         TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_ID}}
         GOOGLE_CALENDAR_ID: ${{secrets.GOOGLE_CALENDAR_ID}}
         CHECK_KEY: ${{secrets.CHECK_KEY}}
+        GOOGLE_KEY: ${{secrets.GOOGLE_KEY}}
     - name: Prepare the Docker container
       run: |
         docker exec \
@@ -230,7 +219,6 @@ jobs:
     - name: Clear all
       if: always()
       run: |
-        rm key/civil-hash.json || true
         docker logs ${DOCKER_CONTAINER_NAME,,} || true
         docker rm -f ${DOCKER_CONTAINER_NAME,,} || true
         docker rmi ${DOCKER_IMAGE_TAG,,} || true
@@ -249,12 +237,6 @@ jobs:
         
     steps:
     - uses: actions/checkout@v3
-    - name: Create Google API key
-      run: |
-        mkdir key
-        cat > key/civil-hash.json <<- END_OF_KEY
-        ${{secrets.GOOGLE_KEY}}
-        END_OF_KEY
     - name: Deploy
       uses: akhileshns/heroku-deploy@v3.12.12
       with:
@@ -267,10 +249,7 @@ jobs:
         HD_TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_ID}}
         HD_GOOGLE_CALENDAR_ID: ${{secrets.GOOGLE_CALENDAR_ID}}
         HD_CHECK_KEY: ${{secrets.CHECK_KEY}}
-    - name: Clear all
-      if: always()
-      run: |
-        rm key/civil-hash.json || true
+        HD_GOOGLE_KEY: ${{secrets.GOOGLE_KEY}}
 
   cronjob:
     name: Create cronjob
