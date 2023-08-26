@@ -99,7 +99,7 @@ jobs:
               --env TELEGRAM_CHANNEL_ID=$TELEGRAM_CHANNEL_ID \
               --env GOOGLE_CALENDAR_ID=$GOOGLE_CALENDAR_ID \
               --env CHECK_KEY=$CHECK_KEY \
-              --env GOOGLE_KEY="${GOOGLE_KEY@E}" \
+              --env GOOGLE_KEY="${GOOGLE_KEY@P}" \
               --env DATABASE_URL=postgres://postgres:postgres@$(hostname -I | awk '{print $1}'):${{ job.services.postgres.ports[5432] }}/postgres \
               ${DOCKER_IMAGE_TAG,,}
       env:
@@ -164,7 +164,7 @@ jobs:
               --env TELEGRAM_CHANNEL_ID=$TELEGRAM_CHANNEL_ID \
               --env GOOGLE_CALENDAR_ID=$GOOGLE_CALENDAR_ID \
               --env CHECK_KEY=$CHECK_KEY \
-              --env GOOGLE_KEY="${GOOGLE_KEY@E}" \
+              --env GOOGLE_KEY="${GOOGLE_KEY@P}" \
               --env KV_URL=redis://$(hostname -I | awk '{print $1}'):${{ job.services.redis.ports[6379] }} \
               --env KV_REST_API_URL=http://redis \
               --env DEPLOY=autotests \
