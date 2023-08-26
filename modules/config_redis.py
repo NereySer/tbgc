@@ -4,6 +4,12 @@ _DEFAULT_VALUES=dict(
     last_time = '0001-01-01T00:00:00+00:00',
 )
 
+_get_redis_url():
+    if os.getenv('KV_REST_API_URL').startswith('https://'):
+        return os.getenv('KV_URL').replace("redis://", "rediss://")
+    else
+        return os.getenv('KV_URL')
+
 class Config(object):
     _instances = {}
 
@@ -13,7 +19,7 @@ class Config(object):
 
             self._prefix = prefix
             self._redis = redis.Redis.from_url(
-              os.getenv('KV_URL').replace("redis://", "rediss://"),
+              _get_redis_url(),
               charset="utf-8",
               decode_responses=True,
             )
