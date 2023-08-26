@@ -13,7 +13,7 @@ jobs:
 
     runs-on: ubuntu-latest
     
-    container: python:3.10
+    container: python:3.9
     
     services:
       postgres:
@@ -25,6 +25,15 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5    
+      redis:
+        image: redis
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     
     steps:
     - uses: actions/checkout@v3
@@ -45,6 +54,8 @@ jobs:
         TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_ID}}
         GOOGLE_CALENDAR_ID: ${{secrets.GOOGLE_CALENDAR_ID}}      
         DATABASE_URL: postgres://postgres:postgres@postgres/postgres
+        KV_URL: redis://redis:6379
+        KV_REST_API_URL: http://redis
         CHECK_KEY: ${{secrets.CHECK_KEY}}
     - name: Clear all
       if: always()
@@ -199,7 +210,7 @@ jobs:
     
     runs-on: ubuntu-latest
 
-    container: python:3.10
+    container: python:3.9
 
     steps:
     - uses: actions/checkout@v3
