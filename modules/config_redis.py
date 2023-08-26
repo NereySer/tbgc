@@ -7,7 +7,7 @@ _DEFAULT_VALUES=dict(
 def _get_redis_url():
     if os.getenv('KV_REST_API_URL').startswith('https://'):
         return os.getenv('KV_URL').replace("redis://", "rediss://")
-    else
+    else:
         return os.getenv('KV_URL')
 
 class Config(object):
