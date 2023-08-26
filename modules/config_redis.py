@@ -4,7 +4,7 @@ _DEFAULT_VALUES=dict(
     last_time = '0001-01-01T00:00:00+00:00',
 )
 
-_get_redis_url():
+def _get_redis_url():
     if os.getenv('KV_REST_API_URL').startswith('https://'):
         return os.getenv('KV_URL').replace("redis://", "rediss://")
     else
