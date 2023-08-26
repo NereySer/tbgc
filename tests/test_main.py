@@ -1,4 +1,4 @@
-import main, os, pytest
+import api.main as main, os, pytest
 from datetime import datetime, timezone
 from tests.tools import g_cal_event
 from modules.time_checks import DEFAULT_TIMEZONE

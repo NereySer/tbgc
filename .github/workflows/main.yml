@@ -85,7 +85,7 @@ jobs:
         docker build . \
               --file Dockerfile \
               --tag ${DOCKER_IMAGE_TAG,,}
-    - name: Run the image and prepare the Docker container
+    - name: Run the image
       run: |
         docker run \
               -d \
@@ -97,16 +97,18 @@ jobs:
               --env CHECK_KEY=$CHECK_KEY \
               --env DATABASE_URL=postgres://postgres:postgres@$(hostname -I | awk '{print $1}'):${{ job.services.postgres.ports[5432] }}/postgres \
               ${DOCKER_IMAGE_TAG,,}
-        docker exec \
-              ${DOCKER_CONTAINER_NAME,,} \
-              bash -c '\
-                apt-get update && \
-                apt-get install -y curl'
       env: 
         TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
         TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_ID}}
         GOOGLE_CALENDAR_ID: ${{secrets.GOOGLE_CALENDAR_ID}}      
         CHECK_KEY: ${{secrets.CHECK_KEY}}
+    - name: Prepare the Docker container
+      run: |
+        docker exec \
+              ${DOCKER_CONTAINER_NAME,,} \
+              bash -c '\
+                apt-get update && \
+                apt-get install -y curl'
     - name: Test denied access
       run: |
         HTTP_CODE=$(docker exec \
