@@ -323,6 +323,8 @@ jobs:
         GOOGLE_CALENDAR_ID: ${{secrets.GOOGLE_CALENDAR_ID}}
         TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
         TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_ID}}
+        VERCEL_TOKEN: ${{secrets.VERCEL_TOKEN}}
+        VERCEL_PROJECT_ID: ${{secrets.VERCEL_PROJECT_ID}}
 
   cronjob_vercel:
     name: Create Vercel cronjob
