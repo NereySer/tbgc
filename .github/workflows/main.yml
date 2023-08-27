@@ -23,7 +23,7 @@ jobs:
           -d '{
           "key": "TEST_VAR",
           "value": "TEST_VALUE",
-          "type": "secret",
+          "type": "sensitive",
           "target": [
             "preview"
           ],
