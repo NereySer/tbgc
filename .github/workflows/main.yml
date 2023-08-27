@@ -50,8 +50,6 @@ jobs:
         KV_REST_API_URL: http://redis
         CHECK_KEY: ${{secrets.CHECK_KEY}}
         GOOGLE_KEY: '${{secrets.GOOGLE_KEY}}'
-    - name: Redeploy application
-      run: curl --fail-with-body "${{ secrets.VERCEL_REDEPLOY_HOOK }}"
 
   docker_test:
     name: Build an image and test it
@@ -327,6 +325,8 @@ jobs:
         TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_ID}}
         VERCEL_TOKEN: ${{secrets.VERCEL_TOKEN}}
         VERCEL_PROJECT_ID: ${{secrets.VERCEL_PROJECT_ID}}
+    - name: Redeploy application
+      run: curl --fail-with-body "${{ secrets.VERCEL_REDEPLOY_HOOK }}"
 
   cronjob_vercel:
     name: Create Vercel cronjob
