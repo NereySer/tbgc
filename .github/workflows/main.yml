@@ -50,6 +50,8 @@ jobs:
         KV_REST_API_URL: http://redis
         CHECK_KEY: ${{secrets.CHECK_KEY}}
         GOOGLE_KEY: '${{secrets.GOOGLE_KEY}}'
+    - name: Redeploy application
+      run: curl --fail-with-body "${{ secrets.VERCEL_REDEPLOY_HOOK }}"
 
   docker_test:
     name: Build an image and test it
