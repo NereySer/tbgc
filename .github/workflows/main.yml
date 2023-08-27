@@ -308,7 +308,7 @@ jobs:
         pip3 install -r ${TOOL_FOLDER}/requirements.txt
     - name: Deploy envs
       run: python3 ${TOOL_FOLDER}/deploy_envs.py
-        ${{ github.ref != 'refs/heads/main' && '--branch develop' }}
+        ${{ github.ref == 'refs/heads/main' && ' ' || '--branch develop' }}
         --envs
           DEPLOY
           GOOGLE_KEY
