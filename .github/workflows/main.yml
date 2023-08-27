@@ -308,7 +308,7 @@ jobs:
         pip3 install -r ${TOOL_FOLDER}/requirements.txt
     - name: Deploy envs
       run: python3 ${TOOL_FOLDER}/deploy_envs.py
-        ${{ github.ref == 'refs/heads/main' && '' || '--branch develop' }}
+        ${{ github.ref == 'refs/heads/main' || '--branch develop' }}
         --envs
           DEPLOY
           GOOGLE_KEY
@@ -325,6 +325,8 @@ jobs:
         TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_ID}}
         VERCEL_TOKEN: ${{secrets.VERCEL_TOKEN}}
         VERCEL_PROJECT_ID: ${{secrets.VERCEL_PROJECT_ID}}
+    - name: Redeploy application
+      run: curl --fail-with-body "${{ secrets.VERCEL_REDEPLOY_HOOK }}"
 
   cronjob_vercel:
     name: Create Vercel cronjob
