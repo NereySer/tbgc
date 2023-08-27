@@ -18,7 +18,7 @@ jobs:
     steps:
     - name: Rest API
       run: |
-        curl -X POST "https://api.vercel.com/v10/projects/${{secrets.VERCEL_PROJECT_ID}}/env?upsert=true" \
+        curl --fail-with-body -X POST "https://api.vercel.com/v10/projects/${{secrets.VERCEL_PROJECT_ID}}/env?upsert=true" \
           -H "Authorization: Bearer ${{secrets.VERCEL_TOKEN}}" \
           -d '{
           "key": "TEST_VAR",
