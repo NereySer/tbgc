@@ -8,13 +8,35 @@ on:
 
 jobs:
 
+  deploy_variables:
+    name: Deploy variables to Vercel
+
+    runs-on: ubuntu-latest
+
+    container: python:3.9
+
+    steps:
+    - name: Rest API
+      run: |
+        curl -X POST "https://api.vercel.com/v10/projects/${{secrets.VERCEL_APP}}/env?upsert=true" \
+          -H "Authorization: Bearer ${{secrets.VERCEL_TOKEN}}" \
+          -d '{
+          "key": "TEST_VAR",
+          "value": "TEST_VALUE",
+          "type": "plain",
+          "target": [
+            "preview"
+          ],
+          "gitBranch": "feat-134-deployment"
+        }'
+
   unit_test:
     name: Build and run tests
 
     runs-on: ubuntu-latest
-    
+
     container: python:3.9
-    
+
     services:
       postgres:
         image: postgres
