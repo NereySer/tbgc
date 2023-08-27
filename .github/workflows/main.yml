@@ -305,13 +305,54 @@ jobs:
         TITLE: Heroku app ${{secrets.HEROKU_APP}} job from github
         CRONJOB_API_KEY: ${{secrets.CRONJOB_API_KEY}}
 
+  deploy_envs_vercel:
+    name: Deploy environment to Vercel
+
+    if: github.ref == 'refs/heads/main' ||
+        github.ref == 'refs/heads/develop'
+
+    needs: [unit_test, docker_test]
+
+    environment: ${{ github.ref == 'refs/heads/main' && 'main' || 'develop' }}
+
+    runs-on: ubuntu-latest
+
+    container: python:3.9
+
+    env:
+      TOOL_FOLDER: .github/tools/vercel_env 
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip3 install -r ${TOOL_FOLDER}/requirements.txt
+    - name: Deploy envs
+      run: python3 ${TOOL_FOLDER}/deploy_envs.py \
+        ${{ github.ref == 'refs/heads/main' && '' || '--branch develop' }} \
+        --envs \
+          DEPLOY \
+          GOOGLE_KEY \
+          CHECK_KEY \
+          GOOGLE_CALENDAR_ID \
+          TELEGRAM_BOT_TOKEN \
+          TELEGRAM_CHANNEL_ID
+      env:
+        DEPLOY: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
+        GOOGLE_KEY: ${{secrets.GOOGLE_KEY}}
+        CHECK_KEY: ${{secrets.CHECK_KEY}}
+        GOOGLE_CALENDAR_ID: ${{secrets.GOOGLE_CALENDAR_ID}}
+        TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
+        TELEGRAM_CHANNEL_ID: ${{secrets.TELEGRAM_CHANNEL_ID}}
+
   cronjob_vercel:
     name: Create Vercel cronjob
 
     if: github.ref == 'refs/heads/main' ||
         github.ref == 'refs/heads/develop'
 
-    needs: [unit_test, docker_test]
+    needs: [deploy_envs_vercel]
 
     environment: ${{ github.ref == 'refs/heads/main' && 'main' || 'develop' }}
 

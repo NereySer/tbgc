@@ -9,9 +9,6 @@ headers = {
     'Content-Type': 'application/json'
 }
 
-print(ENDPOINT)
-print(headers)
-
 def createParser ():
     parser = ArgumentParser()
 
