@@ -9,6 +9,9 @@ headers = {
     'Content-Type': 'application/json'
 }
 
+print(ENDPOINT)
+print(headers)
+
 def createParser ():
     parser = ArgumentParser()
 
@@ -31,7 +34,7 @@ def getEnvTemplate(branch):
         )
 
 def createEnvs(envs):
-    response = requests.put(ENDPOINT, headers=headers, data=json.dumps(envs))
+    response = requests.post(ENDPOINT, headers=headers, data=json.dumps(envs))
 
     if response.status_code < 200 or response.status_code >= 300:
         raise Exception(f"Error {response.status_code}:\n{response.json()}")
