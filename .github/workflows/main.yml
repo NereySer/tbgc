@@ -307,14 +307,14 @@ jobs:
         python -m pip install --upgrade pip
         pip3 install -r ${TOOL_FOLDER}/requirements.txt
     - name: Deploy envs
-      run: python3 ${TOOL_FOLDER}/deploy_envs.py \
-        ${{ github.ref == 'refs/heads/main' && '' || '--branch develop' }} \
-        --envs \
-          DEPLOY \
-          GOOGLE_KEY \
-          CHECK_KEY \
-          GOOGLE_CALENDAR_ID \
-          TELEGRAM_BOT_TOKEN \
+      run: python3 ${TOOL_FOLDER}/deploy_envs.py
+        ${{ github.ref == 'refs/heads/main' && '' || '--branch develop' }}
+        --envs
+          DEPLOY
+          GOOGLE_KEY
+          CHECK_KEY
+          GOOGLE_CALENDAR_ID
+          TELEGRAM_BOT_TOKEN
           TELEGRAM_CHANNEL_ID
       env:
         DEPLOY: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
